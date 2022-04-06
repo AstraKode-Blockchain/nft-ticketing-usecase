@@ -4,9 +4,13 @@ pragma solidity ^0.8.7;
 // Imports
 import "github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/Chainlink.sol";
 import "github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/ChainlinkClient.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 
+interface IERC20 {
+    function transfer(address _to, uint256 _amount) external returns (bool);
+}
 // Define contract that extends ChainlinkClient
-contract GetInfected is ChainlinkClient {
+contract GetInfected is ChainlinkClient, Ownable {
   
     // Declare contract-wide variables
     uint256 public volume;
@@ -25,7 +29,7 @@ contract GetInfected is ChainlinkClient {
     
     // Create a Chainlink request to retrieve API response
     function requestVolumeData() public returns (bytes32 requestId) {
-        bytes32  _requestId;
+        bytes32  reqId;
         
         Chainlink.Request memory request;
         request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
@@ -41,14 +45,21 @@ contract GetInfected is ChainlinkClient {
         
         
 
-        _requestId = sendChainlinkRequestTo(oracle, request, fee);
+        reqId = sendChainlinkRequestTo(oracle, request, fee);
 
         // Return
-        return _requestId;
+        return reqId;
     }
     
     // Receive the response in the form of uint256
     function fulfill(bytes32 _requestId, uint256 _volume) public recordChainlinkFulfillment(_requestId) {
         volume = _volume;
+    }
+
+  function withdrawToken(address _tokenContract, uint256 amount) external onlyOwner {
+        IERC20 tokenContract = IERC20(_tokenContract);
+        
+   
+        tokenContract.transfer(msg.sender, amount);
     }
 }
