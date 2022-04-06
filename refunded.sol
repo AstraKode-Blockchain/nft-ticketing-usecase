@@ -39,6 +39,7 @@ pragma solidity ^0.8.4;
      }
 
 
+
     function refundUsers(
        
         address payable[] memory clients,
@@ -48,7 +49,7 @@ pragma solidity ^0.8.4;
          uint256 length = clients.length;
         require(idRefundParameters[itemId].owner == msg.sender);
         require(idRefundParameters[itemId].refunded == false);
-         require(APIConsumer.volume <=  idRefundParameters[itemId].maxInfection);
+         require(APIConsumer.volume >=  idRefundParameters[itemId].maxInfection);
          idRefundParameters[itemId].refunded = true;
                 for (uint256 i = 0; i < length; i++)
             clients[i].transfer(idRefundParameters[itemId].price);
@@ -58,15 +59,8 @@ pragma solidity ^0.8.4;
  function fetchParameters(
      uint itemId
  ) public view returns ( RefundParameters memory){
-        //  uint itemCount = _itemIds.current();
-        
-        
-
-        
-     
+        //  uint itemCount = _itemIds.current();  
         return idRefundParameters[itemId];
-     
-
  }
 
     }
