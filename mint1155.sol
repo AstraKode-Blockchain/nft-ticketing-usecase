@@ -4,9 +4,13 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 
+<<<<<<< Updated upstream
 contract NFTContract is ERC1155, Ownable {
 
 
+=======
+contract Mint1155 is ERC1155, Ownable {
+>>>>>>> Stashed changes
     constructor(
          
          string memory uri,

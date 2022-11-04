@@ -6,7 +6,11 @@ import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/tok
 import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/ReentrancyGuard.sol";
 import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
 
+<<<<<<< Updated upstream
  contract  marketPlace1155 is ReentrancyGuard, ERC1155Receiver {
+=======
+contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
+>>>>>>> Stashed changes
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     Counters.Counter private _itemsSold;
