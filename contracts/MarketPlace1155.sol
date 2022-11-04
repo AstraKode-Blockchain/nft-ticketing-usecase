@@ -20,30 +20,6 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
         owner = msg.sender;
     }
 
-    /*struct MarketItem {
-        uint itemId;
-        address nftContract;
-        uint256 tokenIds;
-        address payable seller;
-        address payable owner;
-        uint256 price;
-        bool sold;
-    }*/
-    
-    //mapping(uint256 => MarketItem) private idToMarketItem;
-
-    event MarketItemCreated(
-        uint indexed itemId,
-        address indexed nftContract,
-        uint256 indexed tokenIds,
-        address seller,
-        address owner,
-        uint256 price,
-        bool sold
-    );
-
-    event MarketItemSold(uint indexed itemId, address owner);
-
     function onERC1155Received(
         address,
         address,
@@ -94,7 +70,7 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
                 false
             );
 
-            emit MarketItemCreated(
+            emit MarketItemData.MarketItemCreated(
                 itemId,
                 nftContract,
                 tokenIds[i],
@@ -120,7 +96,7 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
             "Please submit the asking price in order to complete the purchase"
         );
         require(sold != true, "This Sale has alredy finished");
-        emit MarketItemSold(itemId, msg.sender);
+        emit MarketItemData.MarketItemSold(itemId, msg.sender);
 
         idToMarketItemData.idToMarketItem[itemId].seller.transfer(msg.value);
         IERC1155(nftContract).safeBatchTransferFrom(
