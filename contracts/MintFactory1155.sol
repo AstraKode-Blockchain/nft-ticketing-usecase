@@ -6,6 +6,7 @@ pragma solidity ^0.8.0;
 import "./NFTContract.sol";
 import "../utils/Counters.sol";
 import "../utils/AccessControl.sol";
+import "../utils/ContractCreated.sol";
 
 contract MintFactory1155 is AccessControl {
     bytes32 public constant MINTER = keccak256("MINTER");
@@ -18,18 +19,6 @@ contract MintFactory1155 is AccessControl {
         _setupRole(MINTER, minter);
         _setupRole(OPERATOR, operator);
     }
-
-    event ContractCreated(
-        address newAddress,
-        string metadata,
-        string name,
-        string image,
-        address owner,
-        bool refunded,
-        uint256 maxInfected,
-        string date,
-        uint256 itemID
-    );
 
     function deployCollection(
         string memory uri,
@@ -44,7 +33,7 @@ contract MintFactory1155 is AccessControl {
         uint256 itemId = _itemIds.current();
         address owner = msg.sender;
         NFTContract Collection = new NFTContract(uri, ids, amount, owner);
-        emit ContractCreated(
+        emit ContractCreated._contractCreated(
             address(Collection),
             uri,
             name,
