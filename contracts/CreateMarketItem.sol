@@ -7,9 +7,7 @@ import "../utils/ERC1155Receiver.sol";
 import "../utils/ERC1155.sol";
 import {MarketItemData} from "../utils/MarketItemData.sol";
 
-
 abstract contract CreateMarketItem is ReentrancyGuard, ERC1155Receiver {
-    
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     using MarketItemData for *;
@@ -35,15 +33,16 @@ abstract contract CreateMarketItem is ReentrancyGuard, ERC1155Receiver {
             _itemIds.increment();
             uint256 itemId = _itemIds.current();
 
-            idToMarketItemData.idToMarketItem[itemId] = MarketItemData.MarketItem(
-                itemId,
-                nftContract,
-                tokenIds[i],
-                payable(msg.sender),
-                payable(address(0)),
-                price,
-                false
-            );
+            idToMarketItemData.idToMarketItem[itemId] = MarketItemData
+                .MarketItem(
+                    itemId,
+                    nftContract,
+                    tokenIds[i],
+                    payable(msg.sender),
+                    payable(address(0)),
+                    price,
+                    false
+                );
 
             emit MarketItemData.MarketItemCreated(
                 itemId,
@@ -56,5 +55,4 @@ abstract contract CreateMarketItem is ReentrancyGuard, ERC1155Receiver {
             );
         }
     }
-
 }

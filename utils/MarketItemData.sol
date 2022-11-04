@@ -2,7 +2,6 @@
 pragma solidity ^0.8.4;
 
 library MarketItemData {
-
     struct MarketItem {
         uint itemId;
         address nftContract;
@@ -28,6 +27,4 @@ library MarketItemData {
     );
 
     event MarketItemSold(uint indexed itemId, address owner);
-
-
 }

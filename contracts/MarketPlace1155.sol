@@ -11,7 +11,7 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
     using Counters for Counters.Counter;
     using MarketItemData for *;
     Counters.Counter private _itemIds;
-    Counters.Counter private _itemsSold; 
+    Counters.Counter private _itemsSold;
     MarketItemData.MarketItemUtils private idToMarketItemData;
 
     address public owner;
@@ -69,16 +69,24 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
         idToMarketItemData.idToMarketItem[itemId].sold = true;
     }
 
-    function fetchMarketItems() public view returns (MarketItemData.MarketItem[] memory) {
+    function fetchMarketItems()
+        public
+        view
+        returns (MarketItemData.MarketItem[] memory)
+    {
         uint itemCount = _itemIds.current();
         uint unsoldItemCount = _itemIds.current() - _itemsSold.current();
         uint currentIndex = 0;
 
-        MarketItemData.MarketItem[] memory items = new MarketItemData.MarketItem[](unsoldItemCount);
+        MarketItemData.MarketItem[]
+            memory items = new MarketItemData.MarketItem[](unsoldItemCount);
         for (uint i = 0; i < itemCount; i++) {
             if (idToMarketItemData.idToMarketItem[i + 1].owner == address(0)) {
                 uint currentId = i + 1;
-                MarketItemData.MarketItem storage currentItem = idToMarketItemData.idToMarketItem[currentId];
+                MarketItemData.MarketItem
+                    storage currentItem = idToMarketItemData.idToMarketItem[
+                        currentId
+                    ];
                 items[currentIndex] = currentItem;
                 currentIndex += 1;
             }
