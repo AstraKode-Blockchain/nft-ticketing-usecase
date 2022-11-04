@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
-import "./utilities/Counters.sol";
+import "../utils/Counters.sol";
 
 contract Refunded {
     using Counters for Counters.Counter;

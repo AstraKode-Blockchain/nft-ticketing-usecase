@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 //import 1155 token contract from Openzeppelin
 
 import "./NFTContract.sol";
-import "./utilities/Counters.sol";
+import "../utils/Counters.sol";
 
 contract MintFactory1155 {
     using Counters for Counters.Counter;

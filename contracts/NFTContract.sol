@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-import "./utilities/ERC1155.sol";
-import "./utilities/Ownable.sol";
+import "../utils/ERC1155.sol";
+import "../utils/Ownable.sol";
 
 contract NFTContract is ERC1155, Ownable {
     constructor(

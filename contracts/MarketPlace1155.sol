@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "./utilities/Counters.sol";
-import "./utilities/ERC1155.sol";
-import "./utilities/ReentrancyGuard.sol";
-import "./utilities/ERC1155Receiver.sol";
+import "../utils/Counters.sol";
+import "../utils/ERC1155.sol";
+import "../utils/ReentrancyGuard.sol";
+import "../utils/ERC1155Receiver.sol";
 
 contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
     using Counters for Counters.Counter;

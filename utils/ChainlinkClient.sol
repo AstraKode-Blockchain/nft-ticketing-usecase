@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../Chainlink.sol";
+import "../contracts/Chainlink.sol";
 import "./ENSInterface.sol";
 import "./LinkTokenInterface.sol";
 import "./ChainlinkRequestInterface.sol";

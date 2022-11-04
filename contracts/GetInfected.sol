@@ -3,8 +3,8 @@ pragma solidity ^0.8.7;
 
 // Imports
 import "./Chainlink.sol";
-import "./utilities/ChainlinkClient.sol";
-import "./utilities/Ownable.sol";
+import "../utils/ChainlinkClient.sol";
+import "../utils/Ownable.sol";
 
 interface IERC20 {
     function transfer(address _to, uint256 _amount) external returns (bool);
