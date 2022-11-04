@@ -40,48 +40,6 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
         return this.onERC1155BatchReceived.selector;
     }
 
-    function createMarketItem(
-        address nftContract,
-        uint256[] memory tokenIds,
-        uint256 price,
-        uint256[] memory amounts
-    ) public payable nonReentrant {
-        require(price > 0, "Price must be greater than 0");
-
-        IERC1155(nftContract).safeBatchTransferFrom(
-            msg.sender,
-            address(this),
-            tokenIds,
-            amounts,
-            ""
-        );
-
-        for (uint i = 0; i <= (tokenIds.length - 1); i++) {
-            _itemIds.increment();
-            uint256 itemId = _itemIds.current();
-
-            idToMarketItemData.idToMarketItem[itemId] = MarketItemData.MarketItem(
-                itemId,
-                nftContract,
-                tokenIds[i],
-                payable(msg.sender),
-                payable(address(0)),
-                price,
-                false
-            );
-
-            emit MarketItemData.MarketItemCreated(
-                itemId,
-                nftContract,
-                tokenIds[i],
-                msg.sender,
-                address(0),
-                price,
-                false
-            );
-        }
-    }
-
     function createMarketSale(
         address nftContract,
         uint256 itemId,
