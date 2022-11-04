@@ -5,29 +5,18 @@ pragma solidity ^0.8.0;
 
 import "./NFTContract.sol";
 import "../utils/Counters.sol";
+import "../utils/AccessControl.sol";
 
-contract MintFactory1155 {
+contract MintFactory1155 is AccessControl {
+    bytes32 public constant MINTER = keccak256("MINTER");
+    bytes32 public constant OPERATOR = keccak256("OPERATOR");
+
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
 
-    mapping(address => bool) public Operators;
-
-    constructor() {
-        Operators[msg.sender] = true;
-    }
-
-    mapping(address => bool) public Minters;
-    event MinterRoleAssigned(address minterAddress);
-
-    function setMinterRole(address _wallet) public {
-        require(Operators[msg.sender] == true);
-        Minters[_wallet] = true;
-        emit MinterRoleAssigned(_wallet);
-    }
-
-    function setOperatorRole(address _operator) public {
-        require(Operators[msg.sender] == true);
-        Operators[_operator] = true;
+    constructor(address minter, address operator) {
+        _setupRole(MINTER, minter);
+        _setupRole(OPERATOR, operator);
     }
 
     event ContractCreated(
