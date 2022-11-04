@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 //import 1155 token contract from Openzeppelin
 
-import "./Mint1155.sol";
+import "./NFTContract.sol";
 import "./utilities/Counters.sol";
 
 contract MintFactory1155 {
