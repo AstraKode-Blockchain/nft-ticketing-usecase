@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 
 //import 1155 token contract from Openzeppelin
 
-import "./mint1155.sol";
- import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Counters.sol";
+import "./Mint1155.sol";
+ import "./utilities/Counters.sol";
 
 
 contract PaasPopTickets {

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Counters.sol";
-import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC1155/ERC1155.sol";
-import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/ReentrancyGuard.sol";
-import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
+import "./utilities/Counters.sol";
+import "./utilities/ERC1155.sol";
+import "./utilities/ReentrancyGuard.sol";
+import "./utilities/ERC1155Receiver.sol";
 
  contract  marketPlace1155 is ReentrancyGuard, ERC1155Receiver {
     using Counters for Counters.Counter;
