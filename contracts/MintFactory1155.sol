@@ -39,8 +39,7 @@ contract MintFactory1155 is AccessControl {
         string memory image,
         uint256 maxInfected,
         string memory date
-    ) public {
-        require(Minters[msg.sender] == true);
+    ) public onlyRole(MINTER) {
         _itemIds.increment();
         uint256 itemId = _itemIds.current();
         address owner = msg.sender;
