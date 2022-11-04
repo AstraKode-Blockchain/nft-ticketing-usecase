@@ -2,7 +2,6 @@
 pragma solidity ^0.8.4;
 
 library RefundedData {
-
     struct RefundParameters {
         uint itemId;
         address nftContract;
