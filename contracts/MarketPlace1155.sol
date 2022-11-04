@@ -5,11 +5,14 @@ import "../utils/Counters.sol";
 import "../utils/ERC1155.sol";
 import "../utils/ReentrancyGuard.sol";
 import "../utils/ERC1155Receiver.sol";
+import {MarketItemData} from "../utils/MarketItemData.sol";
 
 contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
     using Counters for Counters.Counter;
+    using MarketItemData for *;
     Counters.Counter private _itemIds;
-    Counters.Counter private _itemsSold;
+    Counters.Counter private _itemsSold; 
+    MarketItemData.MarketItemUtils private idToMarketItemData;
 
     address public owner;
 
@@ -17,7 +20,7 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
         owner = msg.sender;
     }
 
-    struct MarketItem {
+    /*struct MarketItem {
         uint itemId;
         address nftContract;
         uint256 tokenIds;
@@ -25,9 +28,9 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
         address payable owner;
         uint256 price;
         bool sold;
-    }
-
-    mapping(uint256 => MarketItem) private idToMarketItem;
+    }*/
+    
+    //mapping(uint256 => MarketItem) private idToMarketItem;
 
     event MarketItemCreated(
         uint indexed itemId,
@@ -81,7 +84,7 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
             _itemIds.increment();
             uint256 itemId = _itemIds.current();
 
-            idToMarketItem[itemId] = MarketItem(
+            idToMarketItemData.idToMarketItem[itemId] = MarketItemData.MarketItem(
                 itemId,
                 nftContract,
                 tokenIds[i],
@@ -109,9 +112,9 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
         uint256[] memory _tokenIds,
         uint256[] memory amounts
     ) public payable nonReentrant {
-        uint price = idToMarketItem[itemId].price;
+        uint price = idToMarketItemData.idToMarketItem[itemId].price;
 
-        bool sold = idToMarketItem[itemId].sold;
+        bool sold = idToMarketItemData.idToMarketItem[itemId].sold;
         require(
             msg.value == price,
             "Please submit the asking price in order to complete the purchase"
@@ -119,7 +122,7 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
         require(sold != true, "This Sale has alredy finished");
         emit MarketItemSold(itemId, msg.sender);
 
-        idToMarketItem[itemId].seller.transfer(msg.value);
+        idToMarketItemData.idToMarketItem[itemId].seller.transfer(msg.value);
         IERC1155(nftContract).safeBatchTransferFrom(
             address(this),
             msg.sender,
@@ -127,21 +130,21 @@ contract MarketPlace1155 is ReentrancyGuard, ERC1155Receiver {
             amounts,
             ""
         );
-        idToMarketItem[itemId].owner = payable(msg.sender);
+        idToMarketItemData.idToMarketItem[itemId].owner = payable(msg.sender);
         _itemsSold.increment();
-        idToMarketItem[itemId].sold = true;
+        idToMarketItemData.idToMarketItem[itemId].sold = true;
     }
 
-    function fetchMarketItems() public view returns (MarketItem[] memory) {
+    function fetchMarketItems() public view returns (MarketItemData.MarketItem[] memory) {
         uint itemCount = _itemIds.current();
         uint unsoldItemCount = _itemIds.current() - _itemsSold.current();
         uint currentIndex = 0;
 
-        MarketItem[] memory items = new MarketItem[](unsoldItemCount);
+        MarketItemData.MarketItem[] memory items = new MarketItemData.MarketItem[](unsoldItemCount);
         for (uint i = 0; i < itemCount; i++) {
-            if (idToMarketItem[i + 1].owner == address(0)) {
+            if (idToMarketItemData.idToMarketItem[i + 1].owner == address(0)) {
                 uint currentId = i + 1;
-                MarketItem storage currentItem = idToMarketItem[currentId];
+                MarketItemData.MarketItem storage currentItem = idToMarketItemData.idToMarketItem[currentId];
                 items[currentIndex] = currentItem;
                 currentIndex += 1;
             }
