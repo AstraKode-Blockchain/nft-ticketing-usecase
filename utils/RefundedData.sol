@@ -12,7 +12,7 @@ library RefundedData {
         bool refunded;
     }
 
-    struct MarketItemUtils {
+    struct RefundUtils {
         mapping(uint256 => RefundParameters) idRefundParameters;
     }
 }
