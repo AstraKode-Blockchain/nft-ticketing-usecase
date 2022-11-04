@@ -1,24 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 import "../utils/Counters.sol";
+import {RefundedData} from "../utils/RefundedData.sol";
 
 contract Refunded {
+    using RefundedData for *;
+    RefundedData.RefundUtils private refundUtils;
     using Counters for Counters.Counter;
 
     Counters.Counter private _itemIds;
 
     constructor() {}
-
-    struct RefundParameters {
-        uint itemId;
-        address nftContract;
-        address owner;
-        uint256 price;
-        uint256 maxInfection;
-        bool refunded;
-    }
-
-    mapping(uint256 => RefundParameters) private idRefundParameters;
 
     function addRefundParameters(
         address nftContract,
@@ -26,16 +18,16 @@ contract Refunded {
         uint256 price,
         uint256 itemId
     ) public {
-        require(idRefundParameters[itemId].itemId == (0));
+        require(refundUtils.idRefundParameters[itemId].itemId == (0));
         require(
-            idRefundParameters[itemId].owner ==
+            refundUtils.idRefundParameters[itemId].owner ==
                 (0x0000000000000000000000000000000000000000)
         );
         require(
-            idRefundParameters[itemId].nftContract ==
+            refundUtils.idRefundParameters[itemId].nftContract ==
                 (0x0000000000000000000000000000000000000000)
         );
-        idRefundParameters[itemId] = RefundParameters(
+        refundUtils.idRefundParameters[itemId] = RefundedData.RefundParameters(
             itemId,
             nftContract,
             (msg.sender),
@@ -50,18 +42,18 @@ contract Refunded {
         uint itemId
     ) public payable {
         uint256 length = clients.length;
-        require(idRefundParameters[itemId].owner == msg.sender);
-        require(idRefundParameters[itemId].refunded == false);
-        idRefundParameters[itemId].refunded = true;
+        require(refundUtils.idRefundParameters[itemId].owner == msg.sender);
+        require(refundUtils.idRefundParameters[itemId].refunded == false);
+        refundUtils.idRefundParameters[itemId].refunded = true;
         for (uint256 i = 0; i < length; i++) {
-            clients[i].transfer(idRefundParameters[itemId].price);
+            clients[i].transfer(refundUtils.idRefundParameters[itemId].price);
         }
     }
 
     function fetchParameters(
         uint itemId
-    ) public view returns (RefundParameters memory) {
+    ) public view returns (RefundedData.RefundParameters memory) {
         //  uint itemCount = _itemIds.current();
-        return idRefundParameters[itemId];
+        return refundUtils.idRefundParameters[itemId];
     }
 }
