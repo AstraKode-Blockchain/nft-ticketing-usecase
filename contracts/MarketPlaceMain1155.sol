@@ -56,7 +56,7 @@ contract MarketPlaceMain1155 is ReentrancyGuard, ERC1155Receiver {
         require(sold != true, "This Sale has alredy finished");
         emit MarketItemData.MarketItemSold(itemId, msg.sender);
 
-        idToMarketItemData.idToMarketItem[itemId].seller.transfer(msg.value);
+        idToMarketItemData.idToMarketItem[itemId].seller.call{value: msg.value};
         IERC1155(nftContract).safeBatchTransferFrom(
             address(this),
             msg.sender,

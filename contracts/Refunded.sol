@@ -46,7 +46,10 @@ contract Refunded {
         require(refundUtils.idRefundParameters[itemId].refunded == false);
         refundUtils.idRefundParameters[itemId].refunded = true;
         for (uint256 i = 0; i < length; i++) {
-            clients[i].transfer(refundUtils.idRefundParameters[itemId].price);
+            (bool success, ) = clients[i].call{
+                value: refundUtils.idRefundParameters[itemId].price
+            }("");
+            require(success, "");
         }
     }
 
