@@ -12,7 +12,7 @@ contract Refunded {
 
     constructor() {}
 
-    function addRefundParameters(
+    function _addRefundParameters(
         address nftContract,
         uint256 maxInfection,
         uint256 price,
@@ -37,7 +37,7 @@ contract Refunded {
         );
     }
 
-    function refundUsers(
+    function _refundUsers(
         address payable[] memory clients,
         uint itemId
     ) public payable {
@@ -50,7 +50,7 @@ contract Refunded {
         }
     }
 
-    function fetchParameters(
+    function _fetchParameters(
         uint itemId
     ) public view returns (RefundedData.RefundParameters memory) {
         //  uint itemCount = _itemIds.current();
