@@ -71,4 +71,16 @@ abstract contract Main is
     {
         return super.supportsInterface(interfaceId);
     }
+
+    function deployCollection(
+        string memory uri,
+        uint256[] memory ids,
+        uint256[] memory amount,
+        string memory name,
+        string memory image,
+        uint256 maxInfected,
+        string memory date
+    ) public onlyRole(MINTER) {
+        _deployCollection(uri, ids, amount, name, image, maxInfected, date);
+    }
 }
