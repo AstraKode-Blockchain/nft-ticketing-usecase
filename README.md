@@ -9,5 +9,6 @@ In this repo there are 5 different Smart Contract for the Paaspo PoC.
 
  MarketPlace115.sol orchestrates the buy/sale transactions.
  Mint115_factory.sol deploys a new erc-115 collection ( Mint115.sol).
- Refunded.sol stores the refunding parameters and it calls the oracle (GetInfected.sol) to update the number of covid infected in the Noord-Brabant region. If the value from oracle is   greater than the maxInfected parameters it is possible to refund the clients trough a multisend function.
+ Refunded.sol stores the refunding parameters and it calls the oracle (GetInfected.sol) to update the number of covid infected in the Noord-Brabant region. 
+ If the value from oracle is greater than the maxInfected parameters it is possible to refund the clients trough a multisend function.
  GetInfected.sol Is the contract in charge to make the Oracle Call.
