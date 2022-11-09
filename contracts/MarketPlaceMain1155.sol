@@ -2,7 +2,6 @@
 pragma solidity ^0.8.4;
 
 import "../utils/Counters.sol";
-import "../utils/ERC1155.sol";
 import "../utils/ReentrancyGuard.sol";
 import "../utils/ERC1155Receiver.sol";
 import {MarketItemData} from "../utils/MarketItemData.sol";
@@ -57,7 +56,8 @@ contract MarketPlaceMain1155 is ReentrancyGuard, ERC1155Receiver {
         emit MarketItemData.MarketItemSold(itemId, msg.sender);
 
         idToMarketItemData.idToMarketItem[itemId].seller.call{value: msg.value};
-        IERC1155(nftContract).safeBatchTransferFrom(
+        MarketItemData._safeBatchTransferFrom(
+            nftContract,
             address(this),
             msg.sender,
             _tokenIds,
