@@ -4,14 +4,33 @@ pragma solidity ^0.8.4;
 import "../utils/Counters.sol";
 import "../utils/ReentrancyGuard.sol";
 import "../utils/ERC1155Receiver.sol";
-import "../utils/ERC1155.sol";
 import {MarketItemData} from "../utils/MarketItemData.sol";
 
-abstract contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
+contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     using MarketItemData for *;
     MarketItemData.MarketItemUtils private idToMarketItemData;
+
+    function onERC1155Received(
+        address,
+        address,
+        uint256,
+        uint256,
+        bytes memory
+    ) public virtual override returns (bytes4) {
+        return this.onERC1155Received.selector;
+    }
+
+    function onERC1155BatchReceived(
+        address,
+        address,
+        uint256[] memory,
+        uint256[] memory,
+        bytes memory
+    ) public virtual override returns (bytes4) {
+        return this.onERC1155BatchReceived.selector;
+    }
 
     function _createMarketItem(
         address nftContract,
@@ -21,9 +40,10 @@ abstract contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     ) public payable nonReentrant {
         require(price > 0, "Price must be greater than 0");
 
-        IERC1155(nftContract).safeBatchTransferFrom(
-            msg.sender,
+        MarketItemData._safeBatchTransferFrom(
+            nftContract,
             address(this),
+            msg.sender,
             tokenIds,
             amounts,
             ""
