@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import "../utils/ERC1155.sol";
-import "../utils/Ownable.sol";
 
-contract NFTContract is ERC1155, Ownable {
+contract NFTContract is ERC1155 {
     constructor(
         string memory uri,
         uint256[] memory ids,
@@ -17,4 +16,6 @@ contract NFTContract is ERC1155, Ownable {
     {
         _mintBatch(owner, ids, amount, "");
     }
+
+
 }
