@@ -1,24 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "../utils/Ownable.sol";
 import "./MarketItemMain.sol";
 import "./MarketPlaceMain1155.sol";
 import "./Refunded.sol";
 import "./MintFactoryMain1155.sol";
+import "../utils/ReentrancyGuard.sol";
 
-abstract contract Main is
-    MarketItemMain,
-    MarketPlaceMain1155,
-    Refunded,
-    MintFactoryMain1155
-{
+contract Main is Ownable, ReentrancyGuard {
+    address private _contractAddress;
+
+    function setContractAddress(address contractAddress) private onlyOwner {
+        _contractAddress = contractAddress;
+    }
+
     function createMarketItem(
         address nftContract,
         uint256[] memory tokenIds,
         uint256 price,
         uint256[] memory amounts
     ) public payable nonReentrant {
-        _createMarketItem(nftContract, tokenIds, price, amounts);
+        MarketItemMain callee = MarketItemMain(_contractAddress);
+
+        callee._createMarketItem(nftContract, tokenIds, price, amounts);
     }
 
     function createMarketSale(
@@ -27,7 +32,9 @@ abstract contract Main is
         uint256[] memory _tokenIds,
         uint256[] memory amounts
     ) public payable nonReentrant {
-        _createMarketSale(nftContract, itemId, _tokenIds, amounts);
+        MarketPlaceMain1155 callee = MarketPlaceMain1155(_contractAddress);
+
+        callee._createMarketSale(nftContract, itemId, _tokenIds, amounts);
     }
 
     function fetchMarketItems()
@@ -35,7 +42,9 @@ abstract contract Main is
         view
         returns (MarketItemData.MarketItem[] memory)
     {
-        return _fetchMarketItems();
+        MarketPlaceMain1155 callee = MarketPlaceMain1155(_contractAddress);
+
+        return callee._fetchMarketItems();
     }
 
     function addRefundParameters(
@@ -44,32 +53,26 @@ abstract contract Main is
         uint256 price,
         uint256 itemId
     ) public {
-        _addRefundParameters(nftContract, maxInfection, price, itemId);
+        Refunded callee = Refunded(_contractAddress);
+
+        callee._addRefundParameters(nftContract, maxInfection, price, itemId);
     }
 
     function refundUsers(
         address payable[] memory clients,
         uint itemId
     ) public payable {
-        _refundUsers(clients, itemId);
+        Refunded callee = Refunded(_contractAddress);
+
+        callee._refundUsers(clients, itemId);
     }
 
     function fetchParameters(
         uint itemId
     ) public view returns (RefundedData.RefundParameters memory) {
-        return _fetchParameters(itemId);
-    }
+        Refunded callee = Refunded(_contractAddress);
 
-    function supportsInterface(
-        bytes4 interfaceId
-    )
-        public
-        view
-        virtual
-        override(ERC1155Receiver, AccessControl)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+        return callee._fetchParameters(itemId);
     }
 
     function deployCollection(
@@ -80,7 +83,17 @@ abstract contract Main is
         string memory image,
         uint256 maxInfected,
         string memory date
-    ) public onlyRole(MINTER) {
-        _deployCollection(uri, ids, amount, name, image, maxInfected, date);
+    ) public {
+        MintFactoryMain1155 callee = MintFactoryMain1155(_contractAddress);
+
+        callee._deployCollection(
+            uri,
+            ids,
+            amount,
+            name,
+            image,
+            maxInfected,
+            date
+        );
     }
 }
