@@ -16,6 +16,4 @@ contract NFTContract is ERC1155 {
     {
         _mintBatch(owner, ids, amount, "");
     }
-
-
 }
