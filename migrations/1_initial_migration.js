@@ -1,7 +1,5 @@
-const MarketPlaceMain1155 = artifacts.require("MarketPlaceMain1155");
-const Main = artifacts.require("Main");
+const Migrations = artifacts.require("Migrations");
 
 module.exports = function (deployer) {
-  deployer.deploy(Main);
-  deployer.deploy(MarketPlaceMain1155);
-};
+  deployer.deploy(Migrations);
+}
