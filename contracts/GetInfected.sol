@@ -2,7 +2,7 @@
 pragma solidity ^0.8.7;
 
 // Imports
-import "./Chainlink.sol";
+import "../utils/Chainlink.sol";
 import "../utils/ChainlinkClient.sol";
 import "../utils/Ownable.sol";
 
