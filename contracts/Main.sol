@@ -21,7 +21,7 @@ contract Main is Ownable, ReentrancyGuard {
         uint256 price,
         uint256[] memory amounts
     ) public payable nonReentrant {
-        MarketItemMain callee = MarketItemMain(_contractAddress);
+        MarketItemMain callee = MarketItemMain(payable(_contractAddress));
 
         callee._createMarketItem(nftContract, tokenIds, price, amounts);
     }
