@@ -8,8 +8,14 @@ const GetInfected = artifacts.require('GetInfected');
 const MintFactoryMain1155 = artifacts.require('MintFactoryMain1155');
 const Refunded = artifacts.require('Refunded');
 const NFTContract = artifacts.require('NFTContract');
+const accounts = [
+    "acc0",
+    "acc1",
+    "acc2"
+  ];
 
-module.exports = function (deployer, accounts) {
+
+module.exports = function (deployer) {
   deployer.deploy(Counters);
   deployer.deploy(MarketItemData);
   deployer.deploy(RefundedData);
