@@ -59,8 +59,8 @@ module.exports = {
 
   networks: {
     development:{
-      host: '127.0.0.1',
-      port: 8545,
+      host: '192.168.128.1',
+      port: '7545',
       network_id: '*' // match any network id
     }
   },
@@ -97,7 +97,7 @@ module.exports = {
   //
   // db: {
   //   enabled: false,
-  //   host: "127.0.0.1",
+  //   host: "172.27.64.1",
   //   adapter: {
   //     name: "indexeddb",
   //     settings: {
