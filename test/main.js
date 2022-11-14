@@ -1,8 +1,9 @@
-var assert = require('assert');
-const web3 = require('web3');
-
 const MarketPlaceMain1155 = artifacts.require('MarketPlaceMain1155');
 const MarketItemMain = artifacts.require('MarketItemMain');
+const NFTContract = artifacts.require('NFTContract');
+const Web3 = require('web3');
+const rpcURL = 'http://192.168.128.1:7545';
+const objWeb3 = new Web3(rpcURL);
 
 let marketPlace;
 let marketItem;
@@ -10,25 +11,26 @@ let marketItem;
 before(async () => {
   marketPlace = await MarketPlaceMain1155.deployed();
   marketItem = await MarketItemMain.deployed();
+  nftContract = await NFTContract.deployed();
+  //let result2 = await marketPlace.send(web3.utils.toWei(web3.utils.toBN(1), 'ether'));
 });
 
-contract('1. Market Item test', function (accounts) {
-  it('1. Check if item created', async () => {
-    web3.eth.getBalance('0x15Def00C09DeBa36920C9380Fdb32fa8585899dE',function(error,result){
-      if(error){
-        console.log(error)
-      }
-      else{
-        console.log(result)
-      }
-    });
-    await marketItem.sendTransaction({from: '0x15Def00C09DeBa36920C9380Fdb32fa8585899dE', value:1});
-    var nftContract = "0x290d1d9BaD1A86289827e1a709B65Eec813269E0";
+contract('1. Try to send ethers to contract', function (accounts) {
+  it('1.1 Check if ethers are received', async () => {
+    var contractToReceiveEthers = marketItem.address;
+    objWeb3.eth.sendTransaction({to:contractToReceiveEthers, from:accounts[4], value: objWeb3.utils.toWei('10')});
+  });
+});
+
+contract('2. Market Item test', function (accounts) {
+  it('2.1 Check if item created', async () => {
+    let balance = await objWeb3.eth.getBalance(marketItem.address);
+    assert.equal(balance, 10000000000000000000, "The contract didn't received the ethers");
     var tokenIds = [1];
     var price = 1;
     var amounts = [1];
-    await marketItem._createMarketItem.call(
-      nftContract,
+    marketItem._createMarketItem.call(
+      nftContract.address,
       tokenIds,
       price,
       amounts
@@ -36,15 +38,14 @@ contract('1. Market Item test', function (accounts) {
   });
 });
 
-contract('2. Market place test', function (accounts) {
-  it('2.1 Check if deployer address equal to owner address', async () => {
+/*contract('3. Market place test', function (accounts) {
+  it('3.1 Check if deployer address equal to owner address', async () => {
     var owner_address = await marketPlace.owner.call();
     var deployer_add = accounts[0];
     assert.equal(owner_address, deployer_add, 'mess');
   });
 
-  it('2.2 Fetch all the market items', async () => {
-    var returnValues = await marketPlace._fetchMarketItems.call();
-    console.log('     ', returnValues);
+  it('3.1 Fetch all the market items', async () => {
+    marketPlace._fetchMarketItems.call();
   });
-});
+});*/
