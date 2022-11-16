@@ -5,8 +5,13 @@ import "../utils/Counters.sol";
 import "../utils/ReentrancyGuard.sol";
 import "../utils/ERC1155Receiver.sol";
 import {MarketItemData} from "../utils/MarketItemData.sol";
+import "../utils/MarketPlaceData.sol";
 
-contract MarketPlaceMain1155 is ReentrancyGuard, ERC1155Receiver {
+contract MarketPlaceMain1155 is
+    ReentrancyGuard,
+    ERC1155Receiver,
+    MarketPlaceData
+{
     using Counters for Counters.Counter;
     using MarketItemData for *;
     Counters.Counter private _itemIds;
@@ -44,17 +49,20 @@ contract MarketPlaceMain1155 is ReentrancyGuard, ERC1155Receiver {
         uint256 itemId,
         uint256[] memory _tokenIds,
         uint256[] memory amounts
-    ) public payable nonReentrant {
-        uint price = idToMarketItemData.idToMarketItem[itemId].price;
-
-        bool sold = idToMarketItemData.idToMarketItem[itemId].sold;
-        require(
-            msg.value == price,
-            "Please submit the asking price in order to complete the purchase"
-        );
-        require(sold != true, "This Sale has alredy finished");
-        emit MarketItemData.MarketItemSold(itemId, msg.sender);
-
+    )
+        public
+        payable
+        nonReentrant
+        priceEqualToValue(
+            idToMarketItemData.idToMarketItem[itemId].price,
+            msg.value
+        )
+        alreadySold(
+            idToMarketItemData.idToMarketItem[itemId].sold,
+            itemId,
+            msg.sender
+        )
+    {
         idToMarketItemData.idToMarketItem[itemId].seller.call{value: msg.value};
         MarketItemData._safeBatchTransferFrom(
             nftContract,
@@ -74,15 +82,15 @@ contract MarketPlaceMain1155 is ReentrancyGuard, ERC1155Receiver {
         view
         returns (MarketItemData.MarketItem[] memory)
     {
-        uint itemCount = _itemIds.current();
-        uint unsoldItemCount = _itemIds.current() - _itemsSold.current();
-        uint currentIndex = 0;
+        uint256 itemCount = _itemIds.current();
+        uint256 unsoldItemCount = _itemIds.current() - _itemsSold.current();
+        uint256 currentIndex = 0;
 
         MarketItemData.MarketItem[]
             memory items = new MarketItemData.MarketItem[](unsoldItemCount);
-        for (uint i = 0; i < itemCount; i++) {
+        for (uint256 i = 0; i < itemCount; i++) {
             if (idToMarketItemData.idToMarketItem[i + 1].owner == address(0)) {
-                uint currentId = i + 1;
+                uint256 currentId = i + 1;
                 MarketItemData.MarketItem
                     storage currentItem = idToMarketItemData.idToMarketItem[
                         currentId
