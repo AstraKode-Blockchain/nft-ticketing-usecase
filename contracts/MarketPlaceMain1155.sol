@@ -101,4 +101,12 @@ contract MarketPlaceMain1155 is
         }
         return items;
     }
+
+    fallback() external payable {}
+
+    event ValueReceived(address from, uint amount, address to);
+
+    receive() external payable {
+        emit ValueReceived(msg.sender, msg.value, address(this));
+    }
 }
