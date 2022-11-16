@@ -28,6 +28,8 @@ library MarketItemData {
         bool sold
     );
 
+    event MarketItemSold(uint indexed itemId, address owner);
+
     function _safeBatchTransferFrom(
         address nftContract,
         address from,
