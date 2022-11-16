@@ -32,7 +32,7 @@ contract Main is Ownable, ReentrancyGuard {
         uint256[] memory _tokenIds,
         uint256[] memory amounts
     ) public payable nonReentrant {
-        MarketPlaceMain1155 callee = MarketPlaceMain1155(_contractAddress);
+        MarketPlaceMain1155 callee = MarketPlaceMain1155(payable(_contractAddress));
 
         callee._createMarketSale(nftContract, itemId, _tokenIds, amounts);
     }
@@ -42,7 +42,7 @@ contract Main is Ownable, ReentrancyGuard {
         view
         returns (MarketItemData.MarketItem[] memory)
     {
-        MarketPlaceMain1155 callee = MarketPlaceMain1155(_contractAddress);
+        MarketPlaceMain1155 callee = MarketPlaceMain1155(payable(_contractAddress));
 
         return callee._fetchMarketItems();
     }
