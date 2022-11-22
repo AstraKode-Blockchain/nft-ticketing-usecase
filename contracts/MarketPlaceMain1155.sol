@@ -6,6 +6,7 @@ import "../utils/ReentrancyGuard.sol";
 import "../utils/ERC1155Receiver.sol";
 import {MarketItemData} from "../utils/MarketItemData.sol";
 import "../utils/MarketPlaceData.sol";
+import "../utils/ERC1155.sol";
 
 contract MarketPlaceMain1155 is
     ReentrancyGuard,
@@ -64,14 +65,7 @@ contract MarketPlaceMain1155 is
         )
     {
         idToMarketItemData.idToMarketItem[itemId].seller.call{value: msg.value};
-        MarketItemData._safeBatchTransferFrom(
-            nftContract,
-            address(this),
-            msg.sender,
-            _tokenIds,
-            amounts,
-            ""
-        );
+        IERC1155(nftContract).safeBatchTransferFrom(msg.sender, address(this), _tokenIds, amounts, "");
         idToMarketItemData.idToMarketItem[itemId].owner = payable(msg.sender);
         _itemsSold.increment();
         idToMarketItemData.idToMarketItem[itemId].sold = true;
