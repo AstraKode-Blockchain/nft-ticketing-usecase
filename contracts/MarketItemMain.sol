@@ -37,7 +37,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
         uint256[] memory tokenIds,
         uint256 price,
         uint256[] memory amounts
-    ) public payable nonReentrant {
+    ) public nonReentrant {
         require(price > 0, "Price must be greater than 0");
 
         MarketItemData._safeBatchTransferFrom(
