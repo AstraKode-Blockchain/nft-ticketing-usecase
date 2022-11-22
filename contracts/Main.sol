@@ -9,10 +9,20 @@ import "./MintFactoryMain1155.sol";
 import "../utils/ReentrancyGuard.sol";
 
 contract Main is Ownable, ReentrancyGuard {
-    address private _contractAddress;
+    address private _marketItemContractAddress;
+    address private _marketPlaceContractAddress;
+    address private _refundedContractAddress;
+    address private _mintFactoryContractAddress;
 
-    function setContractAddress(address contractAddress) private onlyOwner {
-        _contractAddress = contractAddress;
+    constructor(address marketItemContractAddress, address marketPlaceContractAddress, address refundedContractAddress, address mintFactoryContractAddress) {
+        _marketItemContractAddress = marketItemContractAddress;
+        _marketPlaceContractAddress = marketPlaceContractAddress;
+        _refundedContractAddress = refundedContractAddress;
+        _mintFactoryContractAddress = mintFactoryContractAddress;
+    }
+
+    function setContractAddress(address contractToSet, address contractAddress) public onlyOwner {
+        contractToSet = contractAddress;
     }
 
     function createMarketItem(
@@ -21,7 +31,7 @@ contract Main is Ownable, ReentrancyGuard {
         uint256 price,
         uint256[] memory amounts
     ) public payable nonReentrant {
-        MarketItemMain callee = MarketItemMain(payable(_contractAddress));
+        MarketItemMain callee = MarketItemMain(payable(_marketItemContractAddress));
 
         callee._createMarketItem(nftContract, tokenIds, price, amounts);
     }
@@ -32,7 +42,7 @@ contract Main is Ownable, ReentrancyGuard {
         uint256[] memory _tokenIds,
         uint256[] memory amounts
     ) public payable nonReentrant {
-        MarketPlaceMain1155 callee = MarketPlaceMain1155(payable(_contractAddress));
+        MarketPlaceMain1155 callee = MarketPlaceMain1155(payable(_marketPlaceContractAddress));
 
         callee._createMarketSale(nftContract, itemId, _tokenIds, amounts);
     }
@@ -42,7 +52,7 @@ contract Main is Ownable, ReentrancyGuard {
         view
         returns (MarketItemData.MarketItem[] memory)
     {
-        MarketPlaceMain1155 callee = MarketPlaceMain1155(payable(_contractAddress));
+        MarketPlaceMain1155 callee = MarketPlaceMain1155(payable(_marketPlaceContractAddress));
 
         return callee._fetchMarketItems();
     }
@@ -53,7 +63,7 @@ contract Main is Ownable, ReentrancyGuard {
         uint256 price,
         uint256 itemId
     ) public {
-        Refunded callee = Refunded(_contractAddress);
+        Refunded callee = Refunded(_refundedContractAddress);
 
         callee._addRefundParameters(nftContract, maxInfection, price, itemId);
     }
@@ -62,7 +72,7 @@ contract Main is Ownable, ReentrancyGuard {
         address payable[] memory clients,
         uint itemId
     ) public payable {
-        Refunded callee = Refunded(_contractAddress);
+        Refunded callee = Refunded(_refundedContractAddress);
 
         callee._refundUsers(clients, itemId);
     }
@@ -70,7 +80,7 @@ contract Main is Ownable, ReentrancyGuard {
     function fetchParameters(
         uint itemId
     ) public view returns (RefundedData.RefundParameters memory) {
-        Refunded callee = Refunded(_contractAddress);
+        Refunded callee = Refunded(_refundedContractAddress);
 
         return callee._fetchParameters(itemId);
     }
@@ -84,7 +94,7 @@ contract Main is Ownable, ReentrancyGuard {
         uint256 maxInfected,
         string memory date
     ) public {
-        MintFactoryMain1155 callee = MintFactoryMain1155(_contractAddress);
+        MintFactoryMain1155 callee = MintFactoryMain1155(_mintFactoryContractAddress);
 
         callee._deployCollection(
             uri,
