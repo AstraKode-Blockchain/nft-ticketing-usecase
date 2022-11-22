@@ -5,6 +5,7 @@ import "../utils/Counters.sol";
 import "../utils/ReentrancyGuard.sol";
 import "../utils/ERC1155Receiver.sol";
 import {MarketItemData} from "../utils/MarketItemData.sol";
+import "../utils/ERC1155.sol";
 
 contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     using Counters for Counters.Counter;
@@ -40,14 +41,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     ) public nonReentrant {
         require(price > 0, "Price must be greater than 0");
 
-        MarketItemData._safeBatchTransferFrom(
-            nftContract,
-            address(this),
-            msg.sender,
-            tokenIds,
-            amounts,
-            ""
-        );
+        IERC1155(nftContract).safeBatchTransferFrom(msg.sender, address(this), tokenIds, amounts, "");
 
         for (uint i = 0; i <= (tokenIds.length - 1); i++) {
             _itemIds.increment();
