@@ -41,7 +41,13 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     ) public payable nonReentrant {
         require(price > 0, "Price must be greater than 0");
 
-        IERC1155(nftContract).safeBatchTransferFrom(msg.sender, address(this), tokenIds, amounts, "");
+        IERC1155(nftContract).safeBatchTransferFrom(
+            msg.sender,
+            address(this),
+            tokenIds,
+            amounts,
+            ""
+        );
 
         for (uint i = 0; i <= (tokenIds.length - 1); i++) {
             _itemIds.increment();
