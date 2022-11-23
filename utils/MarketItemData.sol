@@ -29,21 +29,4 @@ library MarketItemData {
     );
 
     event MarketItemSold(uint indexed itemId, address owner);
-
-    function _safeBatchTransferFrom(
-        address nftContract,
-        address from,
-        address to,
-        uint256[] calldata ids,
-        uint256[] calldata amounts,
-        bytes calldata data
-    ) public {
-        IERC1155(nftContract).safeBatchTransferFrom(
-            from,
-            to,
-            ids,
-            amounts,
-            data
-        );
-    }
 }
