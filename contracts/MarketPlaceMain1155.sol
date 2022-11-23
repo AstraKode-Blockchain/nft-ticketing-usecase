@@ -65,7 +65,13 @@ contract MarketPlaceMain1155 is
         )
     {
         idToMarketItemData.idToMarketItem[itemId].seller.call{value: msg.value};
-        IERC1155(nftContract).safeBatchTransferFrom(msg.sender, address(this), _tokenIds, amounts, "");
+        IERC1155(nftContract).safeBatchTransferFrom(
+            msg.sender,
+            address(this),
+            _tokenIds,
+            amounts,
+            ""
+        );
         idToMarketItemData.idToMarketItem[itemId].owner = payable(msg.sender);
         _itemsSold.increment();
         idToMarketItemData.idToMarketItem[itemId].sold = true;
