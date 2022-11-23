@@ -39,7 +39,7 @@ contract('1. Market Item test', function (accounts) {
   // });
 
   it('1.2 Try to add refund parameters', async () => {
-    await mainContract.addRefundParameters.call(nftContract.address, 100000, 1, 1);
+    await mainContract.addRefundParameters(nftContract.address, 100000, 1, 1);
   });
 
   it('1.3 Try to fetch refund parameters', async () => {
