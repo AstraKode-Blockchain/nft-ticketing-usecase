@@ -11,8 +11,8 @@ let mainContract;
 let marketItem;
 
 before(async () => {
-  nftContract = await NFTContract.at('0x6f6C01523225482A317fDEB50ab65558C2C482b3');
-  mainContract = await Main.at('0xCd6b7003522F10f8916169c2cd7Fc4c1D21a1b3A');
+  nftContract = await NFTContract.deployed();
+  mainContract = await Main.deployed();
   marketItem = await MarketItemMain.deployed();
 });
 
@@ -21,28 +21,28 @@ contract('1. Main contract test', function (accounts) {
     await nftContract.setApprovalForAll(mainContract.address, true);
   });
 
-  // it('1.2 Check if item created', async () => {
-  //   var tokenIds = [1];
-  //   var price = 1;
-  //   var amounts = [1];
-  //   console.log(mainContract.address)
-  //   await mainContract.createMarketItem(
-  //     nftContract.address,
-  //     tokenIds,
-  //     price,
-  //     amounts
-  //   );
-  // });
+  it('1.2 Check if item created', async () => {
+    var tokenIds = [1];
+    var price = 1;
+    var amounts = [1];
+    console.log(mainContract.address)
+    await mainContract.createMarketItem(
+      nftContract.address,
+      tokenIds,
+      price,
+      amounts
+    );
+  });
 
   // it('1.3 Fetch market items' , async () => {
   //   console.log(await mainContract.fetchMarketItems.call())
   // });
 
-  it('1.2 Try to add refund parameters', async () => {
-    await mainContract.addRefundParameters(nftContract.address, 100000, 1, 1);
-  });
+  // it('1.2 Try to add refund parameters', async () => {
+  //   await mainContract.addRefundParameters(nftContract.address, 100000, 1, 1);
+  // });
 
-  it('1.3 Try to fetch refund parameters', async () => {
-    console.log(await mainContract.fetchParameters.call(1));
-  });
+  // it('1.3 Try to fetch refund parameters', async () => {
+  //   console.log(await mainContract.fetchParameters.call(1));
+  // });
 });
