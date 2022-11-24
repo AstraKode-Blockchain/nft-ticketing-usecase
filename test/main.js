@@ -16,7 +16,7 @@ before(async () => {
   marketItem = await MarketItemMain.deployed();
 });
 
-contract('1. Market Item test', function (accounts) {
+contract('1. Main contract test', function (accounts) {
   it('1.1 Try to approve the NFT', async () => {
     await nftContract.setApprovalForAll(mainContract.address, true);
   });
