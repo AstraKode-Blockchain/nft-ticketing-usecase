@@ -35,6 +35,8 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
 
     function _createMarketItem(
         address nftContract,
+        address main,
+        address sender,
         uint256[] memory tokenIds,
         uint256 price,
         uint256[] memory amounts
@@ -42,8 +44,8 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
         require(price > 0, "Price must be greater than 0");
 
         IERC1155(nftContract).safeBatchTransferFrom(
-            msg.sender,
-            address(this),
+            sender, 
+            main, 
             tokenIds,
             amounts,
             ""
