@@ -1,3 +1,4 @@
+const Web3 = require("web3");
 const Counters = artifacts.require('Counters');
 const MarketItemData = artifacts.require('MarketItemData');
 const RefundedData = artifacts.require('RefundedData');
@@ -8,14 +9,19 @@ const GetInfected = artifacts.require('GetInfected');
 const MintFactoryMain1155 = artifacts.require('MintFactoryMain1155');
 const Refunded = artifacts.require('Refunded');
 const NFTContract = artifacts.require('NFTContract');
-const accounts = [
-    "acc0",
-    "acc1",
-    "acc2"
-  ];
+let web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
+let accounts;
 
 
-module.exports = function (deployer) {
+module.exports = async function (deployer) {
+  try {
+    accounts = await web3.eth.getAccounts();
+    console.log(accounts);
+  } catch (error) {
+    console.error(error);
+    
+  }
+    
   deployer.deploy(Counters);
   deployer.deploy(MarketItemData);
   deployer.deploy(RefundedData);
