@@ -35,17 +35,17 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
 
     function _createMarketItem(
         address nftContract,
-        address main,
-        address sender,
+        address fromAddress,
+        address toAddress,
         uint256[] memory tokenIds,
         uint256 price,
         uint256[] memory amounts
     ) public payable nonReentrant {
         require(price > 0, "Price must be greater than 0");
 
-        IERC1155(nftContract).safeBatchTransferFrom(
-            sender,
-            main,
+        IERC1155(fromAddress).safeBatchTransferFrom(
+            fromAddress,
+            toAddress,
             tokenIds,
             amounts,
             ""
@@ -60,7 +60,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
                     itemId,
                     nftContract,
                     tokenIds[i],
-                    payable(msg.sender),
+                    payable(fromAddress),
                     payable(address(0)),
                     price,
                     false
@@ -70,7 +70,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
                 itemId,
                 nftContract,
                 tokenIds[i],
-                msg.sender,
+                fromAddress,
                 address(0),
                 price,
                 false
