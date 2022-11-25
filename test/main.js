@@ -1,6 +1,5 @@
-const NFTContract = artifacts.require('NFTContract');
-const Main = artifacts.require('Main');
-
+const NFTContract = artifacts.require('../contracts/NFTContract.sol');
+const Main = artifacts.require('../contracts/Main.sol');
 const assert = require('assert');
 
 let nftContract;
@@ -8,8 +7,8 @@ let mainContract;
 
 
 before(async () => {
-  nftContract = await NFTContract.deployed();
-  mainContract = await Main.deployed();
+  nftContract = await NFTContract.at(NFTContract.address);
+  mainContract = await Main.at(Main.address);
 });
 
 contract('1. Main contract test', function (accounts) {
