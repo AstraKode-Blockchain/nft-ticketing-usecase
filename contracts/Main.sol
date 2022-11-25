@@ -7,8 +7,9 @@ import "./MarketPlaceMain1155.sol";
 import "./Refunded.sol";
 import "./MintFactoryMain1155.sol";
 import "../utils/ReentrancyGuard.sol";
+import "../utils/ERC1155Receiver.sol";
 
-contract Main is Ownable, ReentrancyGuard {
+contract Main is Ownable, ReentrancyGuard, ERC1155Receiver {
     address private _marketItemContractAddress;
     address private _marketPlaceContractAddress;
     address private _refundedContractAddress;
@@ -137,5 +138,25 @@ contract Main is Ownable, ReentrancyGuard {
             maxInfected,
             date
         );
+    }
+
+    function onERC1155Received(
+        address,
+        address,
+        uint256,
+        uint256,
+        bytes memory
+    ) public virtual override returns (bytes4) {
+        return this.onERC1155Received.selector;
+    }
+
+    function onERC1155BatchReceived(
+        address,
+        address,
+        uint256[] memory,
+        uint256[] memory,
+        bytes memory
+    ) public virtual override returns (bytes4) {
+        return this.onERC1155BatchReceived.selector;
     }
 }
