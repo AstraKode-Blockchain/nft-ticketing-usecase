@@ -14,7 +14,7 @@ before(async () => {
 contract('1. Main contract test', function (accounts) {
   it('1.1 Try to approve the NFT', async () => {
     await nftContract.setApprovalForAll(mainContract.address, true);
-    assert(await nftContract.isApprovedForAll.call(accounts[0], mainContract.address), "NFT don't approved the contract address");
+    assert(await nftContract.isApprovedForAll.call(accounts[0], mainContract.address), "A contract address has not been approved by the NFT contract");
     
   });
 
