@@ -12,16 +12,15 @@ const NFTContract = artifacts.require('NFTContract');
 let web3 = new Web3(Web3.givenProvider || "ws://172.30.64.1:7545");
 let accounts;
 
-
 module.exports = async function (deployer) {
+
   try {
     accounts = await web3.eth.getAccounts();
     console.log(accounts);
   } catch (error) {
     console.error(error);
-    
   }
-    
+
   deployer.deploy(Counters);
   deployer.deploy(MarketItemData);
   deployer.deploy(RefundedData);
@@ -41,7 +40,7 @@ module.exports = async function (deployer) {
   deployer.link(ContractCreated, MintFactoryMain1155);
   deployer.deploy(MintFactoryMain1155, accounts[1], accounts[2]);
 
-  deployer.deploy(NFTContract, "https://www.google.com/", [1], [1], accounts[3]);
+  deployer.deploy(NFTContract, "https://www.google.com/", [1], [1], accounts[0]);
 
   deployer.link(Counters, Refunded);
   deployer.link(RefundedData, Refunded);
