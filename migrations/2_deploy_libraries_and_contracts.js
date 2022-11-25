@@ -9,6 +9,7 @@ const GetInfected = artifacts.require('GetInfected');
 const MintFactoryMain1155 = artifacts.require('MintFactoryMain1155');
 const Refunded = artifacts.require('Refunded');
 const NFTContract = artifacts.require('NFTContract');
+const Main = artifacts.require('Main');
 let web3 = new Web3(Web3.givenProvider || "ws://172.30.64.1:7545");
 let accounts;
 
@@ -45,4 +46,13 @@ module.exports = async function (deployer) {
   await deployer.link(Counters, Refunded);
   await deployer.link(RefundedData, Refunded);
   await deployer.deploy(Refunded);
+
+  await deployer.deploy(
+    Main,
+    MarketItemMain.address,
+    MarketPlaceMain1155.address,
+    Refunded.address,
+    MintFactoryMain1155.address,
+    NFTContract.address
+  );
 }
