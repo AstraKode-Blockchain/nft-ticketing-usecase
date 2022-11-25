@@ -47,6 +47,8 @@ contract MarketPlaceMain1155 is
 
     function _createMarketSale(
         address nftContract,
+        address main,
+        address sender,
         uint256 itemId,
         uint256[] memory _tokenIds,
         uint256[] memory amounts
@@ -61,18 +63,18 @@ contract MarketPlaceMain1155 is
         alreadySold(
             idToMarketItemData.idToMarketItem[itemId].sold,
             itemId,
-            msg.sender
+            sender
         )
     {
         idToMarketItemData.idToMarketItem[itemId].seller.call{value: msg.value};
         IERC1155(nftContract).safeBatchTransferFrom(
-            msg.sender,
-            address(this),
+            sender,
+            main,
             _tokenIds,
             amounts,
             ""
         );
-        idToMarketItemData.idToMarketItem[itemId].owner = payable(msg.sender);
+        idToMarketItemData.idToMarketItem[itemId].owner = payable(sender);
         _itemsSold.increment();
         idToMarketItemData.idToMarketItem[itemId].sold = true;
     }
