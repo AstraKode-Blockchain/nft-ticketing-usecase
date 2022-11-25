@@ -21,28 +21,28 @@ module.exports = async function (deployer) {
     console.error(error);
   }
 
-  deployer.deploy(Counters);
-  deployer.deploy(MarketItemData);
-  deployer.deploy(RefundedData);
-  deployer.deploy(ContractCreated);
+  await deployer.deploy(Counters);
+  await deployer.deploy(MarketItemData);
+  await deployer.deploy(RefundedData);
+  await deployer.deploy(ContractCreated);
 
-  deployer.link(Counters, MarketItemMain);
-  deployer.link(MarketItemData, MarketItemMain);
-  deployer.deploy(MarketItemMain);
+  await deployer.link(Counters, MarketItemMain);
+  await deployer.link(MarketItemData, MarketItemMain);
+  await deployer.deploy(MarketItemMain);
 
-  deployer.link(Counters, MarketPlaceMain1155);
-  deployer.link(MarketItemData, MarketPlaceMain1155);
-  deployer.deploy(MarketPlaceMain1155);
+  await deployer.link(Counters, MarketPlaceMain1155);
+  await deployer.link(MarketItemData, MarketPlaceMain1155);
+  await deployer.deploy(MarketPlaceMain1155);
 
-  deployer.deploy(GetInfected);
+  await deployer.deploy(GetInfected);
 
-  deployer.link(Counters, MintFactoryMain1155);
-  deployer.link(ContractCreated, MintFactoryMain1155);
-  deployer.deploy(MintFactoryMain1155, accounts[1], accounts[2]);
+  await deployer.link(Counters, MintFactoryMain1155);
+  await deployer.link(ContractCreated, MintFactoryMain1155);
+  await deployer.deploy(MintFactoryMain1155, accounts[1], accounts[2]);
 
-  deployer.deploy(NFTContract, "https://www.google.com/", [1], [1], accounts[0]);
+  await deployer.deploy(NFTContract, "https://www.google.com/", [1], [1], accounts[0]);
 
-  deployer.link(Counters, Refunded);
-  deployer.link(RefundedData, Refunded);
-  deployer.deploy(Refunded);
+  await deployer.link(Counters, Refunded);
+  await deployer.link(RefundedData, Refunded);
+  await deployer.deploy(Refunded);
 }
