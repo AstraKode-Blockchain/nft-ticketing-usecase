@@ -52,7 +52,7 @@ contract Main is Ownable, ReentrancyGuard {
             payable(_marketPlaceContractAddress)
         );
 
-        callee._createMarketSale(nftContract, itemId, _tokenIds, amounts);
+        callee._createMarketSale(nftContract, address(this), msg.sender, itemId, _tokenIds, amounts);
     }
 
     function fetchMarketItems()
