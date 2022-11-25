@@ -44,8 +44,8 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
         require(price > 0, "Price must be greater than 0");
 
         IERC1155(nftContract).safeBatchTransferFrom(
-            sender, 
-            main, 
+            sender,
+            main,
             tokenIds,
             amounts,
             ""
