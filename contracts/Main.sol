@@ -36,10 +36,18 @@ contract Main is Ownable, ReentrancyGuard {
         uint256 price,
         uint256[] memory amounts
     ) public payable nonReentrant {
+        MarketItemMain callee = MarketItemMain(
+            payable(_marketItemContractAddress)
+        );
 
-        MarketItemMain callee = MarketItemMain(payable(_marketItemContractAddress));
-
-        callee._createMarketItem(nftContract, address(this) , msg.sender, tokenIds, price, amounts);
+        callee._createMarketItem(
+            nftContract,
+            address(this),
+            msg.sender,
+            tokenIds,
+            price,
+            amounts
+        );
     }
 
     function createMarketSale(
@@ -52,7 +60,14 @@ contract Main is Ownable, ReentrancyGuard {
             payable(_marketPlaceContractAddress)
         );
 
-        callee._createMarketSale(nftContract, address(this), msg.sender, itemId, _tokenIds, amounts);
+        callee._createMarketSale(
+            nftContract,
+            address(this),
+            msg.sender,
+            itemId,
+            _tokenIds,
+            amounts
+        );
     }
 
     function fetchMarketItems()
