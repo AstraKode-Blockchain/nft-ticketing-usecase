@@ -32,17 +32,17 @@ contract('1. Main contract test', function (accounts) {
     assert(flag, "A contract address has not been approved by the NFT contract"); 
   });
 
-  // it('1.2 Try to approve the market place contract', async () => {
+  // it('1.3 Try to approve the market place contract', async () => {
   //   await nftContract.setApprovalForAll(marketPlaceContract.address, true);
   //   var flag = await nftContract.isApprovedForAll(accounts[0], marketPlaceContract.address);
   //   assert(flag, "A contract address has not been approved by the NFT contract"); 
   // });
 
-  it('1.3 Fetch market items' , async () => {
+  it('1.4 Fetch market items' , async () => {
     console.log(await mainContract.fetchMarketItems.call())
   });
 
-  it('1.4 Check if item created', async () => {
+  it('1.5 Check if item created', async () => {
     var tokenIds = [1];
     var price = web3.utils.toWei('0.5','ether');
     var amounts = [1];
@@ -54,7 +54,7 @@ contract('1. Main contract test', function (accounts) {
     );
   });
 
-  it('1.5 Try to create a sale', async () => {
+  it('1.6 Try to create a sale', async () => {
     var itemId = 1;
     var tokenIds = 1;
     var amounts = [1];
@@ -66,15 +66,11 @@ contract('1. Main contract test', function (accounts) {
     );
   });
 
-  // it('1.3 Fetch market items' , async () => {
-  //   console.log(await mainContract.fetchMarketItems.call())
-  // });
-
-  // it('1.2 Try to add refund parameters', async () => {
+  // it('1.7 Try to add refund parameters', async () => {
   //   await mainContract.addRefundParameters(nftContract.address, 100000, 1, 1);
   // });
 
-  // it('1.3 Try to fetch refund parameters', async () => {
+  // it('1.8 Try to fetch refund parameters', async () => {
   //   console.log(await mainContract.fetchParameters.call(1));
   // });
 });
