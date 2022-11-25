@@ -9,7 +9,7 @@ const GetInfected = artifacts.require('GetInfected');
 const MintFactoryMain1155 = artifacts.require('MintFactoryMain1155');
 const Refunded = artifacts.require('Refunded');
 const NFTContract = artifacts.require('NFTContract');
-let web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
+let web3 = new Web3(Web3.givenProvider || "ws://172.30.64.1:7545");
 let accounts;
 
 
@@ -39,9 +39,9 @@ module.exports = async function (deployer) {
 
   deployer.link(Counters, MintFactoryMain1155);
   deployer.link(ContractCreated, MintFactoryMain1155);
-  deployer.deploy(MintFactoryMain1155, accounts[0], accounts[1]);
+  deployer.deploy(MintFactoryMain1155, accounts[1], accounts[2]);
 
-  deployer.deploy(NFTContract, "https://www.google.com/", [1], [1], accounts[2]);
+  deployer.deploy(NFTContract, "https://www.google.com/", [1], [1], accounts[3]);
 
   deployer.link(Counters, Refunded);
   deployer.link(RefundedData, Refunded);
