@@ -13,17 +13,20 @@ contract Main is Ownable, ReentrancyGuard {
     address private _marketPlaceContractAddress;
     address private _refundedContractAddress;
     address private _mintFactoryContractAddress;
+    address private _nftContractAddress;
 
     constructor(
         address marketItemContractAddress,
         address marketPlaceContractAddress,
         address refundedContractAddress,
-        address mintFactoryContractAddress
+        address mintFactoryContractAddress,
+        address nftContractAddress
     ) {
         _marketItemContractAddress = marketItemContractAddress;
         _marketPlaceContractAddress = marketPlaceContractAddress;
         _refundedContractAddress = refundedContractAddress;
         _mintFactoryContractAddress = mintFactoryContractAddress;
+        _nftContractAddress = nftContractAddress;
     }
 
     // function setContractAddress(address contractToSet, address contractAddress) public onlyOwner {
@@ -40,10 +43,12 @@ contract Main is Ownable, ReentrancyGuard {
             payable(_marketItemContractAddress)
         );
 
+        NFTContract nft = NFTContract(_nftContractAddress);
+
         callee._createMarketItem(
             nftContract,
+            nft.getOwner(),
             address(this),
-            msg.sender,
             tokenIds,
             price,
             amounts
