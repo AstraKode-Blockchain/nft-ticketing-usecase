@@ -58,7 +58,7 @@ contract MarketPlaceMain1155 is
         nonReentrant
         priceEqualToValue(
             idToMarketItemData.idToMarketItem[itemId].price,
-            msg.value
+            address(this).balance
         )
         alreadySold(
             idToMarketItemData.idToMarketItem[itemId].sold,
@@ -66,7 +66,7 @@ contract MarketPlaceMain1155 is
             toAddress
         )
     {
-        idToMarketItemData.idToMarketItem[itemId].seller.call{value: msg.value};
+        idToMarketItemData.idToMarketItem[itemId].seller.call{value:address(this).balance};
         IERC1155(nftContract).safeBatchTransferFrom(
             fromAddress,
             toAddress,
