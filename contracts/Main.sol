@@ -85,8 +85,6 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
             payable(_marketPlaceContractAddress)
         );
 
-        NFTContract nft = NFTContract(_nftContractAddress);
-
         (bool sent, bytes memory data) = (
             (payable(_marketPlaceContractAddress))
         ).call{value: idToMarketItemData.idToMarketItem[itemId].price}("");
@@ -95,7 +93,6 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
 
         callee._createMarketSale(
             nftContract,
-            address(this),
             msg.sender,
             itemId,
             _tokenIds,

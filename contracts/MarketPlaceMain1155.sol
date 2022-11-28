@@ -47,7 +47,6 @@ contract MarketPlaceMain1155 is
 
     function _createMarketSale(
         address nftContract,
-        address fromAddress,
         address toAddress,
         uint256 itemId,
         uint256[] memory _tokenIds,
