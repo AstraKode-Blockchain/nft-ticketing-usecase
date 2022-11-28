@@ -9,14 +9,14 @@ let web3 = new Web3(Web3.givenProvider || "ws://172.30.64.1:7545");
 let nftContract;
 let mainContract;
 let marketItemContract;
-//let marketPlaceContract;
+let marketPlaceContract;
 
 
 before(async () => {
   nftContract = await NFTContract.deployed();
   mainContract = await Main.deployed();
   marketItemContract = await MarketItemMain.deployed();
-  //marketPlaceContract = await MarketPlaceMain1155.deployed();
+  marketPlaceContract = await MarketPlaceMain1155.deployed();
 });
 
 contract('1. Main contract test', function (accounts) {
@@ -32,14 +32,14 @@ contract('1. Main contract test', function (accounts) {
     assert(flag, "A contract address has not been approved by the NFT contract"); 
   });
 
-  // it('1.3 Try to approve the market place contract', async () => {
-  //   await nftContract.setApprovalForAll(marketPlaceContract.address, true);
-  //   var flag = await nftContract.isApprovedForAll(accounts[0], marketPlaceContract.address);
-  //   assert(flag, "A contract address has not been approved by the NFT contract"); 
-  // });
+  it('1.3 Try to approve the market place contract', async () => {
+    await nftContract.setApprovalForAll(marketPlaceContract.address, true);
+    var flag = await nftContract.isApprovedForAll(accounts[0], marketPlaceContract.address);
+    assert(flag, "A contract address has not been approved by the NFT contract"); 
+  });
 
   it('1.4 Fetch market items' , async () => {
-    console.log(await mainContract.fetchMarketItems.call())
+    console.log(await mainContract.fetchMarketItems())
   });
 
   it('1.5 Check if item created', async () => {
@@ -55,14 +55,15 @@ contract('1. Main contract test', function (accounts) {
   });
 
   it('1.6 Try to create a sale', async () => {
+    var price = web3.utils.toWei('0.5','ether');
     var itemId = 1;
-    var tokenIds = 1;
+    var tokenIds = [1];
     var amounts = [1];
     await mainContract.createMarketSale(
       nftContract.address,
       itemId,
       tokenIds,
-      amounts, { value: web3.utils.toWei('0.5','ether'), from: accounts[1] }
+      amounts, { value: price, from: accounts[1] }
     );
   });
 
