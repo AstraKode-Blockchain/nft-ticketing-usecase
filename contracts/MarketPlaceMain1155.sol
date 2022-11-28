@@ -56,19 +56,21 @@ contract MarketPlaceMain1155 is
         public
         payable
         nonReentrant
-        priceEqualToValue(
-            idToMarketItemData.idToMarketItem[itemId].price,
-            address(this).balance
-        )
+        // priceEqualToValue(
+        //     idToMarketItemData.idToMarketItem[itemId].price,
+        //     address(this).balance
+        // )
         alreadySold(
             idToMarketItemData.idToMarketItem[itemId].sold,
             itemId,
             toAddress
         )
     {
-        idToMarketItemData.idToMarketItem[itemId].seller.call{value:address(this).balance};
+        idToMarketItemData.idToMarketItem[itemId].seller.call{
+            value: idToMarketItemData.idToMarketItem[itemId].price
+        };
         IERC1155(nftContract).safeBatchTransferFrom(
-            fromAddress,
+            address(this),
             toAddress,
             _tokenIds,
             amounts,
@@ -106,7 +108,7 @@ contract MarketPlaceMain1155 is
 
     fallback() external payable {}
 
-    event ValueReceived(address from, uint amount, address to);
+    event ValueReceived(address from, uint256 amount, address to);
 
     receive() external payable {
         emit ValueReceived(msg.sender, msg.value, address(this));

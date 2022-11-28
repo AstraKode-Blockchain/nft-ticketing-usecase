@@ -11,7 +11,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     using MarketItemData for *;
-    MarketItemData.MarketItemUtils private idToMarketItemData;
+    MarketItemData.MarketItemUtils idToMarketItemData;
 
     function onERC1155Received(
         address,
@@ -51,7 +51,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
             ""
         );
 
-        for (uint i = 0; i <= (tokenIds.length - 1); i++) {
+        for (uint256 i = 0; i <= (tokenIds.length - 1); i++) {
             _itemIds.increment();
             uint256 itemId = _itemIds.current();
 
@@ -69,7 +69,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
             emit MarketItemData.MarketItemCreated(
                 itemId,
                 nftContract,
-                tokenIds[i],
+                tokenIds,
                 fromAddress,
                 address(0),
                 price,
@@ -80,7 +80,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
 
     fallback() external payable {}
 
-    event ValueReceived(address from, uint amount, address to);
+    event ValueReceived(address from, uint256 amount, address to);
 
     receive() external payable {
         emit ValueReceived(msg.sender, msg.value, address(this));

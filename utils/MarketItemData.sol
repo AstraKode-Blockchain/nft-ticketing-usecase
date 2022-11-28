@@ -5,7 +5,7 @@ import "./ERC1155.sol";
 
 library MarketItemData {
     struct MarketItem {
-        uint itemId;
+        uint256 itemId;
         address nftContract;
         uint256 tokenIds;
         address payable seller;
@@ -19,14 +19,14 @@ library MarketItemData {
     }
 
     event MarketItemCreated(
-        uint indexed itemId,
+        uint256 indexed itemId,
         address indexed nftContract,
-        uint256 indexed tokenIds,
+        uint256[] tokenIds,
         address seller,
         address owner,
         uint256 price,
         bool sold
     );
 
-    event MarketItemSold(uint indexed itemId, address owner);
+    event MarketItemSold(uint256 indexed itemId, address owner);
 }
