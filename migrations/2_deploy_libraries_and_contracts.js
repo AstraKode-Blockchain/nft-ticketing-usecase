@@ -41,7 +41,7 @@ module.exports = async function (deployer) {
   await deployer.link(ContractCreated, MintFactoryMain1155);
   await deployer.deploy(MintFactoryMain1155, accounts[1], accounts[2]);
 
-  await deployer.deploy(NFTContract, "https://www.google.com/", [1], [1], accounts[0]);
+  await deployer.deploy(NFTContract, "https://www.google.com/", [1], [1], '0xEA0DB635541716c1a747Fec587FB5fa054B6DC64');
 
   await deployer.link(Counters, Refunded);
   await deployer.link(RefundedData, Refunded);
