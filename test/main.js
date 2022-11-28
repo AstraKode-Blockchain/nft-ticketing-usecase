@@ -56,6 +56,7 @@ contract('1. Main contract test', function (accounts) {
 
   it('1.6 Try to create a sale', async () => {
     var price = web3.utils.toWei('0.5','ether');
+    await web3.eth.sendTransaction({to:marketPlaceContract.address, from:accounts[5], value: price});
     var itemId = 1;
     var tokenIds = [1];
     var amounts = [1];
@@ -63,7 +64,7 @@ contract('1. Main contract test', function (accounts) {
       nftContract.address,
       itemId,
       tokenIds,
-      amounts, { value: price, from: accounts[1] }
+      amounts
     );
   });
 
