@@ -61,19 +61,31 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver {
         uint256 itemId,
         uint256[] memory _tokenIds,
         uint256[] memory amounts
-    ) public payable nonReentrant {
+    ) public payable nonReentrant returns(bytes memory) {
+
         MarketPlaceMain1155 callee = MarketPlaceMain1155(
             payable(_marketPlaceContractAddress)
         );
 
+        NFTContract nft = NFTContract(_nftContractAddress);
+
+
+        (bool sent, bytes memory data) = (
+            (payable(address(callee)))
+        ).call{value: msg.value}("");
+
+        require(sent, "Failed to send Ether");
+
         callee._createMarketSale(
             nftContract,
-            address(this),
-            msg.sender,
+            nft.getOwner(),
+            address(callee),
             itemId,
             _tokenIds,
             amounts
         );
+
+        return data;
     }
 
     function fetchMarketItems()
@@ -158,5 +170,13 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver {
         bytes memory
     ) public virtual override returns (bytes4) {
         return this.onERC1155BatchReceived.selector;
+    }
+
+    fallback() external payable {}
+
+    event ValueReceived(address from, uint amount, address to);
+
+    receive() external payable {
+        emit ValueReceived(msg.sender, msg.value, address(this));
     }
 }
