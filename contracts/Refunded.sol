@@ -53,6 +53,11 @@ contract Refunded {
         }
     }
 
+    /**
+     * @dev Obtain all refund parameters.
+     * @param itemId .
+     * @return 
+     */
     function _fetchParameters(
         uint itemId
     ) public view returns (RefundedData.RefundParameters memory) {
