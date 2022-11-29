@@ -15,6 +15,7 @@ library MarketItemData {
     }
 
     struct MarketItemUtils {
+        // This mapping is used for finding market item by their id
         mapping(uint256 => MarketItem) idToMarketItem;
     }
 

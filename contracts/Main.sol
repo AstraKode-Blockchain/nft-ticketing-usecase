@@ -125,20 +125,18 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
         callee._addRefundParameters(nftContract, maxInfection, price, itemId);
     }
 
-    function refundUsers(address payable[] memory clients, uint256 itemId)
-        public
-        payable
-    {
+    function refundUsers(
+        address payable[] memory clients,
+        uint256 itemId
+    ) public payable {
         Refunded callee = Refunded(_refundedContractAddress);
 
         callee._refundUsers(clients, itemId);
     }
 
-    function fetchParameters(uint256 itemId)
-        public
-        view
-        returns (RefundedData.RefundParameters memory)
-    {
+    function fetchParameters(
+        uint256 itemId
+    ) public view returns (RefundedData.RefundParameters memory) {
         Refunded callee = Refunded(_refundedContractAddress);
 
         return callee._fetchParameters(itemId);

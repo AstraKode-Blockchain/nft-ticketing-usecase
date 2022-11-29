@@ -33,6 +33,17 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
         return this.onERC1155BatchReceived.selector;
     }
 
+    /**
+     * @notice Utilizing nonReentrant from ReentrancyGuard.
+     * @dev Create market item and store it in a mapping from id to market item struct (the struct declared in the MarketItemData library).
+     * Emits MarketItemCreated event.
+     * @param nftContract The NFT contract address.
+     * @param fromAddress The contract address that sent the NFT.
+     * @param toAddress The contract address that received NFT.
+     * @param tokenIds The market item ids.
+     * @param price The market item price.
+     * @param amounts The amount of market items to create.
+     */
     function _createMarketItem(
         address nftContract,
         address fromAddress,

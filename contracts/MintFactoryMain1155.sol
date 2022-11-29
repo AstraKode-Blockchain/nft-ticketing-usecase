@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-//import 1155 token contract from Openzeppelin
-
 import "./NFTContract.sol";
 import "../utils/Counters.sol";
 import "../utils/AccessControl.sol";
@@ -31,6 +29,18 @@ contract MintFactoryMain1155 is AccessControl {
         _setupRole(OPERATOR, operator);
     }
 
+    /**
+     * @notice Utilizing onlyRole from AccessControl.
+     * @dev Deployed a NFT collection.
+     * Emits _contractCreated event.
+     * @param uri The NFT URI.
+     * @param ids The NFT ids.
+     * @param amount The amount of NFTs to be deployed.
+     * @param name The NFT collection name.
+     * @param image The NFT image path.
+     * @param maxInfected The maximum number of infected people in a country.
+     * @param date The deployment date of the collection..
+     */
     function _deployCollection(
         string memory uri,
         uint256[] memory ids,

@@ -45,6 +45,16 @@ contract MarketPlaceMain1155 is
         return this.onERC1155BatchReceived.selector;
     }
 
+    
+    /**
+     * @notice Utilizing nonReentrant from ReentrancyGuard.
+     * @dev 
+     * @param nftContract The NFT contract address.
+     * @param toAddress The contract address that buy the market items.
+     * @param itemId The item id.
+     * @param _tokenIds The token ids to sale.
+     * @param amounts The amount of market items to sale.
+     */
     function _createMarketSale(
         address nftContract,
         address toAddress,
@@ -80,6 +90,10 @@ contract MarketPlaceMain1155 is
         idToMarketItemData.idToMarketItem[itemId].sold = true;
     }
 
+    /**
+     * @dev Obtain all unsold items from the market.
+     * @return A market item struct array (the struct declared in the MarketItemData library).
+     */
     function _fetchMarketItems()
         public
         view
