@@ -8,9 +8,11 @@ import "./Refunded.sol";
 import "./MintFactoryMain1155.sol";
 import "../utils/ReentrancyGuard.sol";
 import "../utils/ERC1155Receiver.sol";
+import {MarketItemData} from "../utils/MarketItemData.sol";
 
 contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
     // address private _marketItemContractAddress;
+    using MarketItemData for *;
     address payable private _marketPlaceContractAddress;
     address private _refundedContractAddress;
     address private _mintFactoryContractAddress;
@@ -33,15 +35,33 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
     // function setContractAddress(address contractToSet, address contractAddress) public onlyOwner {
     //     contractToSet = contractAddress;
     // }
-    event MarketItemCreated(
-        uint256 indexed itemId,
-        address indexed nftContract,
-        uint256[] tokenIds,
-        address seller,
-        address owner,
-        uint256 price,
-        bool sold
-    );
+
+    function setMarketPlaceContractAddress(
+        address payable marketPlaceContractAddress
+    ) public onlyOwner {
+        _marketPlaceContractAddress = marketPlaceContractAddress;
+    }
+
+    function setRefundedContractAddress(address refundedContractAddress)
+        public
+        onlyOwner
+    {
+        _refundedContractAddress = refundedContractAddress;
+    }
+
+    function setMintFactoryContractAddress(address mintFactoryContractAddress)
+        public
+        onlyOwner
+    {
+        _mintFactoryContractAddress = mintFactoryContractAddress;
+    }
+
+    function setNftContractAddress(address nftContractAddress)
+        public
+        onlyOwner
+    {
+        _nftContractAddress = nftContractAddress;
+    }
 
     /**
      * @dev Run _createMarketItem function from the MarketItemMain contract.
@@ -72,7 +92,7 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
             amounts
         );
 
-        emit MarketItemCreated(
+        emit MarketItemData.MarketItemCreated(
             1,
             address(nft),
             tokenIds,
@@ -85,12 +105,12 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
 
     /**
      * @notice Call _createMarketSale function from the MarketPlaceMain1155 contract.
-     * @dev 
+     * @dev
      * @param nftContract The NFT contract address.
      * @param itemId The item id.
      * @param _tokenIds The token ids to sale.
      * @param amounts The amount of market items to sale.
-     * @return 
+     * @return
      */
     function createMarketSale(
         address nftContract,
@@ -139,8 +159,8 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
      * @dev Call _addRefundParameters function from the Refunded contract.
      * @param nftContract .
      * @param maxInfection .
-     * @param price . 
-     * @param itemId .  
+     * @param price .
+     * @param itemId .
      */
     function addRefundParameters(
         address nftContract,
@@ -156,12 +176,12 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
     /**
      * @dev Call _refundUsers function from the Refunded contract.
      * @param clients .
-     * @param itemId . 
+     * @param itemId .
      */
-    function refundUsers(
-        address payable[] memory clients,
-        uint256 itemId
-    ) public payable {
+    function refundUsers(address payable[] memory clients, uint256 itemId)
+        public
+        payable
+    {
         Refunded callee = Refunded(_refundedContractAddress);
 
         callee._refundUsers(clients, itemId);
@@ -170,16 +190,17 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
     /**
      * @dev Call _fetchParameters function from the Refunded contract.
      * @param itemId .
-     * @return 
+     * @return
      */
-    function fetchParameters(
-        uint256 itemId
-    ) public view returns (RefundedData.RefundParameters memory) {
+    function fetchParameters(uint256 itemId)
+        public
+        view
+        returns (RefundedData.RefundParameters memory)
+    {
         Refunded callee = Refunded(_refundedContractAddress);
 
         return callee._fetchParameters(itemId);
     }
-
 
     /**
      * @dev Call _deployCollection function from the MintFactoryMain1155 contract.

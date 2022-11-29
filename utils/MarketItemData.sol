@@ -19,6 +19,8 @@ library MarketItemData {
         mapping(uint256 => MarketItem) idToMarketItem;
     }
 
+    event ValueReceived(address from, uint256 amount, address to);
+
     event MarketItemCreated(
         uint256 indexed itemId,
         address indexed nftContract,

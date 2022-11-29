@@ -91,9 +91,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
 
     fallback() external payable {}
 
-    event ValueReceived(address from, uint256 amount, address to);
-
     receive() external payable {
-        emit ValueReceived(msg.sender, msg.value, address(this));
+        emit MarketItemData.ValueReceived(msg.sender, msg.value, address(this));
     }
 }

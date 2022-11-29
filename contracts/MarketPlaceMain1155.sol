@@ -45,10 +45,9 @@ contract MarketPlaceMain1155 is
         return this.onERC1155BatchReceived.selector;
     }
 
-    
     /**
      * @notice Utilizing nonReentrant from ReentrancyGuard.
-     * @dev 
+     * @dev
      * @param nftContract The NFT contract address.
      * @param toAddress The contract address that buy the market items.
      * @param itemId The item id.
@@ -121,9 +120,7 @@ contract MarketPlaceMain1155 is
 
     fallback() external payable {}
 
-    event ValueReceived(address from, uint256 amount, address to);
-
     receive() external payable {
-        emit ValueReceived(msg.sender, msg.value, address(this));
+        emit MarketItemData.ValueReceived(msg.sender, msg.value, address(this));
     }
 }
