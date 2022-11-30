@@ -13,18 +13,18 @@ const Main = artifacts.require("Main");
 
 var Web3EthContract = require("web3-eth-contract");
 Web3EthContract.setProvider("ws://localhost:9545");
+
+let web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
 let accounts;
-accounts = [
-  "0x6523db309b8fec358d17f244f5d1c279cbbe2f30",
-  "0xa7352507d4983d7e15064f9e8f3fdbffc00da33a",
-];
+
 module.exports = async function (deployer) {
-  // try {
-  //   accounts = await web3.eth.getAccounts();
-  //   console.log(accounts);
-  // } catch (error) {
-  //   console.error(error);
-  // }
+  // retrieves truffle accounts list instead of hardcoding
+  try {
+    accounts = await web3.eth.getAccounts();
+    console.log(accounts);
+  } catch (error) {
+    console.error(error);
+  }
 
   await deployer.deploy(Counters);
   await deployer.deploy(MarketItemData);
@@ -43,7 +43,7 @@ module.exports = async function (deployer) {
 
   await deployer.link(Counters, MintFactoryMain1155);
   await deployer.link(ContractCreated, MintFactoryMain1155);
-  await deployer.deploy(MintFactoryMain1155, accounts[0], accounts[1]);
+  await deployer.deploy(MintFactoryMain1155, accounts[0], accounts[0]);
 
   await deployer.deploy(
     NFTContract,
