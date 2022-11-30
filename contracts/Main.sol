@@ -8,59 +8,64 @@ import "./Refunded.sol";
 import "./MintFactoryMain1155.sol";
 import "../utils/ReentrancyGuard.sol";
 import "../utils/ERC1155Receiver.sol";
+import "../utils/FeeManager.sol";
 import {MarketItemData} from "../utils/MarketItemData.sol";
 
-contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
+contract Main is
+    Ownable,
+    ReentrancyGuard,
+    ERC1155Receiver,
+    MarketItemMain,
+    FeeManager
+{
     // address private _marketItemContractAddress;
     using MarketItemData for *;
-    address payable private _marketPlaceContractAddress;
-    address private _refundedContractAddress;
-    address private _mintFactoryContractAddress;
-    address private _nftContractAddress;
 
-    constructor(
+    struct ContractsAddresses {
+        address payable _marketPlaceContractAddress;
+        address payable _refundedContractAddress;
+        address payable _mintFactoryContractAddress;
+        address payable _nftContractAddress;
+    }
+
+    ContractsAddresses contractsAddressesData;
+
+    constructor (
         // address marketItemContractAddress,
-        address payable marketPlaceContractAddress,
+        address marketPlaceContractAddress,
         address refundedContractAddress,
         address mintFactoryContractAddress,
         address nftContractAddress
-    ) {
+    ) FeeManager(owner()) {
+        contractsAddressesData._marketPlaceContractAddress = payable(
+            marketPlaceContractAddress
+        );
+        contractsAddressesData._refundedContractAddress = payable(
+            refundedContractAddress
+        );
+        contractsAddressesData._mintFactoryContractAddress = payable(
+            mintFactoryContractAddress
+        );
+        contractsAddressesData._nftContractAddress = payable(nftContractAddress);
         // _marketItemContractAddress = marketItemContractAddress;
-        _marketPlaceContractAddress = marketPlaceContractAddress;
-        _refundedContractAddress = refundedContractAddress;
-        _mintFactoryContractAddress = mintFactoryContractAddress;
-        _nftContractAddress = nftContractAddress;
     }
 
-    // function setContractAddress(address contractToSet, address contractAddress) public onlyOwner {
-    //     contractToSet = contractAddress;
-    // }
-
-    function setMarketPlaceContractAddress(
-        address payable marketPlaceContractAddress
+    function SetContractsAddressProperties(
+        address marketPlaceContractAddress,
+        address refundedContractAddress,
+        address mintFactoryContractAddress,
+        address nftContractAddress
     ) public onlyOwner {
-        _marketPlaceContractAddress = marketPlaceContractAddress;
-    }
-
-    function setRefundedContractAddress(address refundedContractAddress)
-        public
-        onlyOwner
-    {
-        _refundedContractAddress = refundedContractAddress;
-    }
-
-    function setMintFactoryContractAddress(address mintFactoryContractAddress)
-        public
-        onlyOwner
-    {
-        _mintFactoryContractAddress = mintFactoryContractAddress;
-    }
-
-    function setNftContractAddress(address nftContractAddress)
-        public
-        onlyOwner
-    {
-        _nftContractAddress = nftContractAddress;
+        contractsAddressesData._marketPlaceContractAddress = payable(
+            marketPlaceContractAddress
+        );
+        contractsAddressesData._refundedContractAddress = payable(
+            refundedContractAddress
+        );
+        contractsAddressesData._mintFactoryContractAddress = payable(
+            mintFactoryContractAddress
+        );
+        contractsAddressesData._nftContractAddress = payable(nftContractAddress);
     }
 
     /**
@@ -81,12 +86,12 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
         //     payable(_marketItemContractAddress)
         // );
 
-        NFTContract nft = NFTContract(_nftContractAddress);
+        NFTContract nft = NFTContract(contractsAddressesData._nftContractAddress);
 
         _createMarketItem(
             nftContract,
             nft.getOwner(),
-            _marketPlaceContractAddress,
+            contractsAddressesData._marketPlaceContractAddress,
             tokenIds,
             price,
             amounts
@@ -104,29 +109,25 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
     }
 
     /**
-     * @notice Call _createMarketSale function from the MarketPlaceMain1155 contract.
-     * @dev
+     * @notice Utilizing nonReentrant from ReentrancyGuard.
+     * @dev Call _createMarketSale function from the MarketPlaceMain1155 contract.
+     * Call transferWithFee function from the FeeManager contract.
      * @param nftContract The NFT contract address.
      * @param itemId The item id.
      * @param _tokenIds The token ids to sale.
      * @param amounts The amount of market items to sale.
-     * @return
      */
     function createMarketSale(
         address nftContract,
         uint256 itemId,
         uint256[] memory _tokenIds,
         uint256[] memory amounts
-    ) public payable nonReentrant returns (bytes memory) {
+    ) public payable nonReentrant {
         MarketPlaceMain1155 callee = MarketPlaceMain1155(
-            payable(_marketPlaceContractAddress)
+            payable(contractsAddressesData._marketPlaceContractAddress)
         );
 
-        (bool sent, bytes memory data) = (
-            (payable(_marketPlaceContractAddress))
-        ).call{value: idToMarketItemData.idToMarketItem[itemId].price}("");
-
-        require(sent, "Failed to send Ether");
+        transferWithFee(payable(contractsAddressesData._marketPlaceContractAddress), idToMarketItemData.idToMarketItem[itemId].price);
 
         callee._createMarketSale(
             nftContract,
@@ -135,8 +136,6 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
             _tokenIds,
             amounts
         );
-
-        return data;
     }
 
     /**
@@ -149,7 +148,7 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
         returns (MarketItemData.MarketItem[] memory)
     {
         MarketPlaceMain1155 callee = MarketPlaceMain1155(
-            payable(_marketPlaceContractAddress)
+            payable(contractsAddressesData._marketPlaceContractAddress)
         );
 
         return callee._fetchMarketItems();
@@ -157,10 +156,10 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
 
     /**
      * @dev Call _addRefundParameters function from the Refunded contract.
-     * @param nftContract .
-     * @param maxInfection .
-     * @param price .
-     * @param itemId .
+     * @param nftContract The NFT contract address.
+     * @param maxInfection The maximum number of infected people in a country.
+     * @param price The amount to be refunded to the buyer.
+     * @param itemId The item id.
      */
     function addRefundParameters(
         address nftContract,
@@ -168,36 +167,40 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
         uint256 price,
         uint256 itemId
     ) public {
-        Refunded callee = Refunded(_refundedContractAddress);
+        Refunded callee = Refunded(
+            contractsAddressesData._refundedContractAddress
+        );
 
         callee._addRefundParameters(nftContract, maxInfection, price, itemId);
     }
 
     /**
      * @dev Call _refundUsers function from the Refunded contract.
-     * @param clients .
-     * @param itemId .
+     * @param clients The addresses need to be refunded.
+     * @param itemId The item id.
      */
-    function refundUsers(address payable[] memory clients, uint256 itemId)
-        public
-        payable
-    {
-        Refunded callee = Refunded(_refundedContractAddress);
+    function refundUsers(
+        address payable[] memory clients,
+        uint256 itemId
+    ) public payable {
+        Refunded callee = Refunded(
+            contractsAddressesData._refundedContractAddress
+        );
 
         callee._refundUsers(clients, itemId);
     }
 
     /**
      * @dev Call _fetchParameters function from the Refunded contract.
-     * @param itemId .
-     * @return
+     * @param itemId The item id.
+     * @return A refund parameters struct (the struct declared in the RefundParameters library).
      */
-    function fetchParameters(uint256 itemId)
-        public
-        view
-        returns (RefundedData.RefundParameters memory)
-    {
-        Refunded callee = Refunded(_refundedContractAddress);
+    function fetchParameters(
+        uint256 itemId
+    ) public view returns (RefundedData.RefundParameters memory) {
+        Refunded callee = Refunded(
+            contractsAddressesData._refundedContractAddress
+        );
 
         return callee._fetchParameters(itemId);
     }
@@ -222,7 +225,7 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
         string memory date
     ) public {
         MintFactoryMain1155 callee = MintFactoryMain1155(
-            _mintFactoryContractAddress
+            contractsAddressesData._mintFactoryContractAddress
         );
 
         callee._deployCollection(

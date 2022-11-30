@@ -12,6 +12,7 @@ library RefundedData {
     }
 
     struct RefundUtils {
+        // This mapping is used for finding refund parameters by their id
         mapping(uint256 => RefundParameters) idRefundParameters;
     }
 }

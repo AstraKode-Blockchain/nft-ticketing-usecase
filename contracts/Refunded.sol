@@ -12,6 +12,14 @@ contract Refunded {
 
     constructor() {}
 
+    /**
+     * @dev Store refund parameters in a map (map declared in the RefundedData library).
+     * Reverts if one of the owner and NFT contract addresses is equal to 0.   
+     * @param nftContract The NFT contract address.
+     * @param maxInfection The maximum number of infected people in a country.
+     * @param price The amount to be refunded to the buyer.
+     * @param itemId The item id.
+     */
     function _addRefundParameters(
         address nftContract,
         uint256 maxInfection,
@@ -37,6 +45,12 @@ contract Refunded {
         );
     }
 
+    /**
+     * @dev Refund all the buyer of the item.
+     * Reverts if the owner isn't the msg.sender and if the iteam is already refunded.
+     * @param clients The addresses need to be refunded.
+     * @param itemId The item id.
+     */
     function _refundUsers(
         address payable[] memory clients,
         uint itemId
@@ -56,7 +70,7 @@ contract Refunded {
     /**
      * @dev Obtain all refund parameters.
      * @param itemId .
-     * @return 
+     * @return A refund parameters struct (the struct declared in the RefundParameters library).
      */
     function _fetchParameters(
         uint itemId
