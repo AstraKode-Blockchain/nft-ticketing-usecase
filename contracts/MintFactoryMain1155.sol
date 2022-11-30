@@ -9,13 +9,16 @@ import "../utils/ContractCreated.sol";
 contract MintFactoryMain1155 is AccessControl {
     bytes32 public constant MINTER = keccak256("MINTER");
     bytes32 public constant OPERATOR = keccak256("OPERATOR");
+    bytes32 public constant CUST_ADMIN = keccak256("CUST_ADMIN");
 
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
 
     constructor(address minter, address operator) {
-        _setupRole(MINTER, minter);
+        _setupRole(CUST_ADMIN, operator);
+        //_setRoleAdmin(OPERATOR, CUST_ADMIN);
         _setupRole(OPERATOR, operator);
+        _setupRole(MINTER, minter);
     }
 
     event _contractCreated(

@@ -56,7 +56,7 @@ module.exports = async function (deployer) {
   await deployer.link(Counters, Refunded);
   await deployer.link(RefundedData, Refunded);
   await deployer.deploy(Refunded);
-
+  await deployer.link(MarketItemData, Main);
   await deployer.deploy(
     Main,
     MarketPlaceMain1155.address,

@@ -1,6 +1,8 @@
 const NFTContract = artifacts.require("../contracts/NFTContract.sol");
 const Main = artifacts.require("../contracts/Main.sol");
 const MarketItemMain = artifacts.require("../contracts/MarketItemMain");
+const Refunded = artifacts.require("../contracts/Refunded");
+
 const MintFactoryMain1155 = artifacts.require(
   "../contracts/MintFactoryMain1155"
 );
@@ -10,36 +12,48 @@ const MarketPlaceMain1155 = artifacts.require(
 const assert = require("assert");
 const Web3 = require("web3");
 var Web3EthContract = require("web3-eth-contract");
-Web3EthContract.setProvider("ws://localhost:9545");
+Web3EthContract.setProvider("ws://localhost:7545");
 
 let nftContract;
 let mainContract;
 let marketItemContract;
 let marketPlaceContract;
-
-before(async () => {
-  // nftContract = await NFTContract.deployed();
-  mainContract = await Main.deployed();
-  marketItemContract = await MarketItemMain.deployed();
-  marketPlaceContract = await MarketPlaceMain1155.deployed();
-  mintFactory = await MintFactoryMain1155.deployed();
-
-  var res = await mintFactory._deployCollection(
-    "uri",
-    [1, 2],
-    [1, 1],
-    "name",
-    "image",
-    1000,
-    "date"
-  );
-
-  nftAddress = res.logs[0].args.newAddress;
-  console.log(nftAddress);
-  nftContract = await NFTContract.at(nftAddress);
-});
+let refundedContract;
+let mintFactory;
+let nftAddress;
 
 contract("1. Main contract test", function (accounts) {
+  before(async () => {
+    // nftContract = await NFTContract.deployed();
+    console.log(accounts[0]);
+
+    marketItemContract = await MarketItemMain.deployed();
+    marketPlaceContract = await MarketPlaceMain1155.deployed();
+    mintFactory = await MintFactoryMain1155.deployed(accounts[0], accounts[0]);
+    refundedContract = await Refunded.deployed();
+
+    var res = await mintFactory._deployCollection(
+      "uri",
+      [1, 2],
+      [1, 1],
+      "name",
+      "image",
+      1000,
+      "date"
+    );
+
+    nftAddress = res.logs[0].args.newAddress;
+    console.log(nftAddress);
+    nftContract = await NFTContract.at(nftAddress);
+
+    mainContract = await Main.deployed(
+      marketPlaceContract.address,
+      refundedContract.address,
+      mintFactory.address,
+      nftAddress
+    );
+  });
+
   it("1.1 Try to approve the main contract", async () => {
     await nftContract.setApprovalForAll(mainContract.address, true);
     var flag = await nftContract.isApprovedForAll(
