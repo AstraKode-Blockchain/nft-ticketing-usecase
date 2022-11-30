@@ -50,7 +50,7 @@ module.exports = async function (deployer) {
     "https://www.google.com/",
     [1],
     [1],
-    "0x6523db309b8fec358d17f244f5d1c279cbbe2f30"
+    accounts[0]
   );
 
   await deployer.link(Counters, Refunded);
