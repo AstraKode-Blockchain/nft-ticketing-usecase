@@ -69,7 +69,7 @@ contract Refunded {
 
     /**
      * @dev Obtain all refund parameters.
-     * @param itemId .
+     * @param itemId The item id.
      * @return A refund parameters struct (the struct declared in the RefundParameters library).
      */
     function _fetchParameters(
