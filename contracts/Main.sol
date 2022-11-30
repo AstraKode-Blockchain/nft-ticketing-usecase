@@ -30,7 +30,7 @@ contract Main is
 
     ContractsAddresses contractsAddressesData;
 
-    constructor (
+    constructor(
         // address marketItemContractAddress,
         address marketPlaceContractAddress,
         address refundedContractAddress,
@@ -46,7 +46,9 @@ contract Main is
         contractsAddressesData._mintFactoryContractAddress = payable(
             mintFactoryContractAddress
         );
-        contractsAddressesData._nftContractAddress = payable(nftContractAddress);
+        contractsAddressesData._nftContractAddress = payable(
+            nftContractAddress
+        );
         // _marketItemContractAddress = marketItemContractAddress;
     }
 
@@ -65,7 +67,9 @@ contract Main is
         contractsAddressesData._mintFactoryContractAddress = payable(
             mintFactoryContractAddress
         );
-        contractsAddressesData._nftContractAddress = payable(nftContractAddress);
+        contractsAddressesData._nftContractAddress = payable(
+            nftContractAddress
+        );
     }
 
     /**
@@ -86,7 +90,9 @@ contract Main is
         //     payable(_marketItemContractAddress)
         // );
 
-        NFTContract nft = NFTContract(contractsAddressesData._nftContractAddress);
+        NFTContract nft = NFTContract(
+            contractsAddressesData._nftContractAddress
+        );
 
         _createMarketItem(
             nftContract,
@@ -127,7 +133,10 @@ contract Main is
             payable(contractsAddressesData._marketPlaceContractAddress)
         );
 
-        transferWithFee(payable(contractsAddressesData._marketPlaceContractAddress), idToMarketItemData.idToMarketItem[itemId].price);
+        transferWithFee(
+            payable(contractsAddressesData._marketPlaceContractAddress),
+            idToMarketItemData.idToMarketItem[itemId].price
+        );
 
         callee._createMarketSale(
             nftContract,

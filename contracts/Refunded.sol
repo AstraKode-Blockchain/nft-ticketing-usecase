@@ -14,7 +14,7 @@ contract Refunded {
 
     /**
      * @dev Store refund parameters in a map (map declared in the RefundedData library).
-     * Reverts if one of the owner and NFT contract addresses is equal to 0.   
+     * Reverts if one of the owner and NFT contract addresses is equal to 0.
      * @param nftContract The NFT contract address.
      * @param maxInfection The maximum number of infected people in a country.
      * @param price The amount to be refunded to the buyer.

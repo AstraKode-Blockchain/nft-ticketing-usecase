@@ -47,7 +47,7 @@ contract MarketPlaceMain1155 is
 
     /**
      * @notice Utilizing nonReentrant from ReentrancyGuard, priceEqualToValue and alreadySold from MarketPlaceData.
-     * @dev Create an item sale and transfer the NFT to the buyer using IERC1155 safe batch transfer. 
+     * @dev Create an item sale and transfer the NFT to the buyer using IERC1155 safe batch transfer.
      * @param nftContract The NFT contract address.
      * @param toAddress The contract address that buy the market items.
      * @param itemId The item id.
