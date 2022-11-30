@@ -7,6 +7,12 @@ contract FeeManager {
     uint256 public fee;
     mapping(address => bool) OperatorId;
 
+    constructor(address _operator) {
+        operator = payable(_operator);
+        feeReceiver = payable(_operator);
+        OperatorId[_operator] = true;
+    }
+
     modifier isOperator(address caller) {
         require(OperatorId[caller] == true, "You Are Not an Operator");
         _;
