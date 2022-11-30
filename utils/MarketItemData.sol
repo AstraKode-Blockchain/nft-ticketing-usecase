@@ -21,6 +21,14 @@ library MarketItemData {
 
     event ValueReceived(address from, uint256 amount, address to);
 
+    function emitValueReceived(
+        address from,
+        uint256 amount,
+        address to
+    ) public {
+        emit ValueReceived(from, amount, to);
+    }
+
     event MarketItemCreated(
         uint256 indexed itemId,
         address indexed nftContract,
@@ -31,5 +39,29 @@ library MarketItemData {
         bool sold
     );
 
+    function emitMarketItemCreated(
+        uint256 itemId,
+        address nftContract,
+        uint256[] memory tokenIds,
+        address seller,
+        address owner,
+        uint256 price,
+        bool sold
+    ) public {
+        emit MarketItemCreated(
+            itemId,
+            nftContract,
+            tokenIds,
+            seller,
+            owner,
+            price,
+            sold
+        );
+    }
+
     event MarketItemSold(uint256 indexed itemId, address owner);
+
+    function emitEMarketItemSold(uint256 itemId, address owner) public {
+        emit MarketItemSold(itemId, owner);
+    }
 }

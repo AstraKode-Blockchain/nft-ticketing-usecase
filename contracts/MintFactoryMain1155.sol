@@ -18,6 +18,18 @@ contract MintFactoryMain1155 is AccessControl {
         _setupRole(OPERATOR, operator);
     }
 
+    event _contractCreated(
+        address newAddress,
+        string metadata,
+        string name,
+        string image,
+        address owner,
+        bool refunded,
+        uint256 maxInfected,
+        string date,
+        uint256 itemID
+    );
+
     /**
      * @notice Utilizing onlyRole from AccessControl.
      * @dev Deployed a NFT collection.
@@ -43,7 +55,8 @@ contract MintFactoryMain1155 is AccessControl {
         uint256 itemId = _itemIds.current();
         address owner = msg.sender;
         NFTContract Collection = new NFTContract(uri, ids, amount, owner);
-        emit ContractCreated._contractCreated(
+
+        ContractCreated.emitEvent(
             address(Collection),
             uri,
             name,

@@ -77,7 +77,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
                     false
                 );
 
-            emit MarketItemData.MarketItemCreated(
+            MarketItemData.emitMarketItemCreated(
                 itemId,
                 nftContract,
                 tokenIds,
@@ -92,6 +92,6 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     fallback() external payable {}
 
     receive() external payable {
-        emit MarketItemData.ValueReceived(msg.sender, msg.value, address(this));
+        MarketItemData.emitValueReceived(msg.sender, msg.value, address(this));
     }
 }

@@ -103,7 +103,7 @@ contract Main is
             amounts
         );
 
-        emit MarketItemData.MarketItemCreated(
+        MarketItemData.emitMarketItemCreated(
             1,
             address(nft),
             tokenIds,
@@ -128,12 +128,12 @@ contract Main is
         uint256 itemId,
         uint256[] memory _tokenIds,
         uint256[] memory amounts
-    ) public payable nonReentrant {
+    ) public payable nonReentrant returns (bytes memory, bytes memory) {
         MarketPlaceMain1155 callee = MarketPlaceMain1155(
             payable(contractsAddressesData._marketPlaceContractAddress)
         );
 
-        transferWithFee(
+        (bytes memory data, bytes memory data2) = transferWithFee(
             payable(contractsAddressesData._marketPlaceContractAddress),
             idToMarketItemData.idToMarketItem[itemId].price
         );
@@ -145,6 +145,8 @@ contract Main is
             _tokenIds,
             amounts
         );
+
+        return (data, data2);
     }
 
     /**

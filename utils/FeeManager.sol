@@ -36,7 +36,10 @@ contract FeeManager {
         feeReceiver = newfeeReceiver;
     }
 
-    function transferWithFee(address payable _to, uint256 _value) public {
+    function transferWithFee(
+        address payable _to,
+        uint256 _value
+    ) public returns (bytes memory, bytes memory) {
         uint256 feeValue = ((_value * fee) / 100);
         uint256 newValue = (_value - feeValue);
         (bool sent, bytes memory data) = _to.call{value: newValue}("");
@@ -45,5 +48,7 @@ contract FeeManager {
         );
         require(sent, "Error on sending founds ");
         require(sent2, "Error on sending founds to FeeOperator");
+
+        return (data, data2);
     }
 }
