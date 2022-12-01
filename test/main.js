@@ -12,7 +12,7 @@ const MarketPlaceMain1155 = artifacts.require(
 const assert = require("assert");
 const Web3 = require("web3");
 var Web3EthContract = require("web3-eth-contract");
-Web3EthContract.setProvider("ws://localhost:7545");
+Web3EthContract.setProvider("ws://localhost:9545");
 
 let nftContract;
 let mainContract;
@@ -126,11 +126,23 @@ contract("1. Main contract test", function (accounts) {
     console.log(balance2);
   });
 
-  // it('1.7 Try to add refund parameters', async () => {
-  //   await mainContract.addRefundParameters(nftContract.address, 100000, 1, 1);
-  // });
+  it("1.7 Try to approve the refunded contract", async () => {
+    await nftContract.setApprovalForAll(refundedContract.address, true);
+    var flag = await nftContract.isApprovedForAll(
+      accounts[0],
+      refundedContract.address
+    );
+    assert(
+      flag,
+      "A contract address has not been approved by the NFT contract"
+    );
+  });
 
-  // it('1.8 Try to fetch refund parameters', async () => {
-  //   console.log(await mainContract.fetchParameters.call(1));
-  // });
+  it('1.8 Try to add refund parameters', async () => {
+    await mainContract.addRefundParameters(nftContract.address, 100000, 1, 1);
+  });
+
+  it('1.9 Try to fetch refund parameters', async () => {
+    console.log(await mainContract.fetchParameters.call(1));
+  });
 });
