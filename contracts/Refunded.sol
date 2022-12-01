@@ -3,8 +3,7 @@ pragma solidity ^0.8.4;
 import "../utils/Counters.sol";
 import {RefundedData} from "../utils/RefundedData.sol";
 
-contract Refunded {
-    using RefundedData for *;
+contract Refunded is RefundedData {
     RefundedData.RefundUtils private refundUtils;
     using Counters for Counters.Counter;
 
@@ -46,24 +45,30 @@ contract Refunded {
     }
 
     /**
+     * @notice Utilizing alreadyRefunded and ownerEqualToSender from RefundedData.
      * @dev Refund all the buyer of the item.
-     * Reverts if the owner isn't the msg.sender and if the iteam is already refunded.
      * @param clients The addresses need to be refunded.
      * @param itemId The item id.
      */
     function _refundUsers(
         address payable[] memory clients,
         uint itemId
-    ) public payable {
+    )
+        public
+        payable
+        alreadyRefunded(refundUtils.idRefundParameters[itemId].refunded)
+        ownerEqualToSender(
+            refundUtils.idRefundParameters[itemId].owner,
+            msg.sender
+        )
+    {
         uint256 length = clients.length;
-        require(refundUtils.idRefundParameters[itemId].owner == msg.sender);
-        require(refundUtils.idRefundParameters[itemId].refunded == false);
         refundUtils.idRefundParameters[itemId].refunded = true;
         for (uint256 i = 0; i < length; i++) {
             (bool success, ) = clients[i].call{
                 value: refundUtils.idRefundParameters[itemId].price
             }("");
-            require(success, "");
+            require(success, "Error on sending founds");
         }
     }
 
