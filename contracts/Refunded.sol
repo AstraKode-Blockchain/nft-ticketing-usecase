@@ -10,7 +10,8 @@ contract Refunded is RefundedData {
     Counters.Counter private _itemIds;
 
     constructor() {}
-
+    //test event
+    
     /**
      * @dev Store refund parameters in a map (map declared in the RefundedData library).
      * Reverts if one of the owner and NFT contract addresses is equal to 0.
@@ -19,6 +20,7 @@ contract Refunded is RefundedData {
      * @param price The amount to be refunded to the buyer.
      * @param itemId The item id.
      */
+
     function _addRefundParameters(
         address nftContract,
         uint256 maxInfection,

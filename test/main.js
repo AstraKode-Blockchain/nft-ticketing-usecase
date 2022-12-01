@@ -2,7 +2,7 @@ const NFTContract = artifacts.require("../contracts/NFTContract.sol");
 const Main = artifacts.require("../contracts/Main.sol");
 const MarketItemMain = artifacts.require("../contracts/MarketItemMain");
 const Refunded = artifacts.require("../contracts/Refunded");
-
+const truffleAssert = require("truffle-assertions");
 const MintFactoryMain1155 = artifacts.require(
   "../contracts/MintFactoryMain1155"
 );
@@ -127,26 +127,69 @@ contract("1. Main contract test", function (accounts) {
   });
 
   it("1.7 Try to approve the refunded contract", async () => {
-    await nftContract.setApprovalForAll(refundedContract.address, true);
+    var event = await nftContract.setApprovalForAll(
+      refundedContract.address,
+      true
+    );
     var flag = await nftContract.isApprovedForAll(
       accounts[0],
       refundedContract.address
     );
+    console.log("----------");
+    //console.log(event);
+    truffleAssert.eventEmitted(event, "ApprovalForAll");
+
     assert(
       flag,
       "A contract address has not been approved by the NFT contract"
     );
+
+    assert.equal(
+      event.logs[0].event,
+      "ApprovalForAll",
+      "Invalid event emitted"
+    );
   });
 
-  it('1.8 Try to add refund parameters', async () => {
+  it("1.8 Try to add refund parameters", async () => {
     var price = web3.utils.toWei("0.5", "ether");
-    await mainContract.addRefundParameters(nftContract.address, 100000, price, 1);
+    var event = await mainContract.addRefundParameters(
+      nftContract.address,
+      100000,
+      price,
+      1
+    );
+
+    truffleAssert.eventEmitted(event, "RefundParametersAdded");
+
+    assert.equal(
+      event.logs[0].event,
+      "RefundParametersAdded",
+      "Invalid event emitted"
+    );
   });
 
-  it('1.9 Try to fetch refund parameters', async () => {
-    console.log(await mainContract.fetchParameters.call(1));
+  it("1.9 Try to fetch refund parameters", async () => {
+    var price = web3.utils.toWei("0.5", "ether");
+    var result = await mainContract.fetchParameters.call(1);
+    console.log("---------------------------------");
+    console.log(result);
+    assert.equal(result[0], 1, "Error: Invalid item id");
+    assert.equal(
+      result[1],
+      nftContract.address,
+      "Error: Invalid NFT contract address"
+    );
+    assert.equal(result[3], price, "Error: Invalid price");
+    assert.equal(result[4], 100000, "Error: Invalid maxInfection");
   });
 
+  // it('1.10 Try to refund client', async () => {
+  //   console.log(await mainContract.refundUsers.call([accounts[1]], 1));
+  // });
+});
+
+it("1.10 Try to refun client", async () => {
   // it('1.10 Try to refund client', async () => {
   //   console.log(await mainContract.refundUsers.call([accounts[1]], 1));
   // });

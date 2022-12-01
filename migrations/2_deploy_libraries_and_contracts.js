@@ -12,9 +12,9 @@ const NFTContract = artifacts.require("NFTContract");
 const Main = artifacts.require("Main");
 
 var Web3EthContract = require("web3-eth-contract");
-Web3EthContract.setProvider("ws://localhost:9545");
+Web3EthContract.setProvider("ws://localhost:7545");
 
-let web3 = new Web3(Web3.givenProvider || "ws://localhost:9545");
+let web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
 let accounts;
 
 module.exports = async function (deployer) {

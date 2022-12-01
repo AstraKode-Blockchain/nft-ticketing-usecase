@@ -164,7 +164,10 @@ contract Main is
 
         return callee._fetchMarketItems();
     }
-
+    event RefundParametersAdded(address nftContract,
+        uint256 maxInfection,
+        uint256 price,
+        uint256 itemId);
     /**
      * @dev Call _addRefundParameters function from the Refunded contract.
      * @param nftContract The NFT contract address.
@@ -183,6 +186,10 @@ contract Main is
         );
 
         callee._addRefundParameters(nftContract, maxInfection, price, itemId);
+        
+        emit RefundParametersAdded(nftContract, maxInfection, price, itemId);
+
+
     }
 
     /**
