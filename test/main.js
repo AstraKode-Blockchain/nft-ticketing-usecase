@@ -139,10 +139,15 @@ contract("1. Main contract test", function (accounts) {
   });
 
   it('1.8 Try to add refund parameters', async () => {
-    await mainContract.addRefundParameters(nftContract.address, 100000, 1, 1);
+    var price = web3.utils.toWei("0.5", "ether");
+    await mainContract.addRefundParameters(nftContract.address, 100000, price, 1);
   });
 
   it('1.9 Try to fetch refund parameters', async () => {
     console.log(await mainContract.fetchParameters.call(1));
   });
+
+  // it('1.10 Try to refund client', async () => {
+  //   console.log(await mainContract.refundUsers.call([accounts[1]], 1));
+  // });
 });
