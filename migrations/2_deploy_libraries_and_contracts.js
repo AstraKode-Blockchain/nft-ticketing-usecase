@@ -14,7 +14,7 @@ const Main = artifacts.require("Main");
 var Web3EthContract = require("web3-eth-contract");
 Web3EthContract.setProvider("ws://localhost:9545");
 
-let web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
+let web3 = new Web3(Web3.givenProvider || "ws://localhost:9545");
 let accounts;
 
 module.exports = async function (deployer) {
@@ -28,7 +28,7 @@ module.exports = async function (deployer) {
 
   await deployer.deploy(Counters);
   await deployer.deploy(MarketItemData);
-  await deployer.deploy(RefundedData);
+  //await deployer.deploy(RefundedData);
   await deployer.deploy(ContractCreated);
 
   await deployer.link(Counters, MarketItemMain);
@@ -54,7 +54,7 @@ module.exports = async function (deployer) {
   );
 
   await deployer.link(Counters, Refunded);
-  await deployer.link(RefundedData, Refunded);
+  // await deployer.link(RefundedData, Refunded);
   await deployer.deploy(Refunded);
   await deployer.link(MarketItemData, Main);
   await deployer.deploy(
