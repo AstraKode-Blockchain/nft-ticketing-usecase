@@ -10,7 +10,6 @@ const MarketPlaceMain1155 = artifacts.require(
   "../contracts/MarketPlaceMain1155"
 );
 const assert = require("assert");
-const Web3 = require("web3");
 var Web3EthContract = require("web3-eth-contract");
 Web3EthContract.setProvider("ws://localhost:9545");
 

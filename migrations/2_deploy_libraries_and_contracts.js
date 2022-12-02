@@ -1,7 +1,6 @@
 const Web3 = require("web3");
 const Counters = artifacts.require("Counters");
 const MarketItemData = artifacts.require("MarketItemData");
-const RefundedData = artifacts.require("RefundedData");
 const ContractCreated = artifacts.require("ContractCreated");
 const MarketItemMain = artifacts.require("MarketItemMain");
 const MarketPlaceMain1155 = artifacts.require("MarketPlaceMain1155");
@@ -12,9 +11,9 @@ const NFTContract = artifacts.require("NFTContract");
 const Main = artifacts.require("Main");
 
 var Web3EthContract = require("web3-eth-contract");
-Web3EthContract.setProvider("ws://localhost:7545");
+Web3EthContract.setProvider("ws://localhost:9545");
 
-let web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
+let web3 = new Web3(Web3.givenProvider || "ws://localhost:9545");
 let accounts;
 
 module.exports = async function (deployer) {
