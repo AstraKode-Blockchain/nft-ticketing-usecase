@@ -202,7 +202,7 @@ contract Main is
         uint256 itemId
     ) public payable {
 
-        (bytes memory data, bytes memory data2) = transferWithFee(
+        transferWithFee(
             payable(contractsAddressesData._refundedContractAddress),
             msg.value
         );
