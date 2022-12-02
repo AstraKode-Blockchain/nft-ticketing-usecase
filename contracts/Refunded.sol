@@ -85,4 +85,8 @@ contract Refunded is RefundedData {
         //  uint itemCount = _itemIds.current();
         return refundUtils.idRefundParameters[itemId];
     }
+
+    fallback() external payable {}
+
+    receive() external payable {}
 }

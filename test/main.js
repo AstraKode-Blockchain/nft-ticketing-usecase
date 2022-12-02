@@ -184,13 +184,11 @@ contract("1. Main contract test", function (accounts) {
     assert.equal(result[4], 100000, "Error: Invalid maxInfection");
   });
 
-  // it('1.10 Try to refund client', async () => {
-  //   console.log(await mainContract.refundUsers.call([accounts[1]], 1));
-  // });
-});
-
-it("1.10 Try to refun client", async () => {
-  // it('1.10 Try to refund client', async () => {
-  //   console.log(await mainContract.refundUsers.call([accounts[1]], 1));
-  // });
+  it('1.10 Try to refund client', async () => {
+    var price = web3.utils.toWei("0.5", "ether");
+    var beforeRefund = await web3.eth.getBalance(accounts[1]);
+    await mainContract.refundUsers([accounts[1]], 1, { value: price});
+    var afterRefund = await web3.eth.getBalance(accounts[1]);
+    assert.notEqual(beforeRefund, afterRefund, "Error: The account didn't refunded");
+  });
 });

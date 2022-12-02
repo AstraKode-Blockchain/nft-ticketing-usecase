@@ -201,6 +201,12 @@ contract Main is
         address payable[] memory clients,
         uint256 itemId
     ) public payable {
+
+        (bytes memory data, bytes memory data2) = transferWithFee(
+            payable(contractsAddressesData._refundedContractAddress),
+            msg.value
+        );
+
         Refunded callee = Refunded(
             contractsAddressesData._refundedContractAddress
         );
