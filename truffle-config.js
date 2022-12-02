@@ -17,7 +17,9 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
-
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+const fs = require("fs");
+const mnemonic = "";
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 //
 // const fs = require('fs');
@@ -39,6 +41,14 @@ module.exports = {
       host: "127.0.0.1",
       port: "7545",
       network_id: "*", // match any network id
+    },
+    matic: {
+      provider: () =>
+        new HDWalletProvider(mnemonic, `https://rpc-mumbai.maticvigil.com`),
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
     },
   },
 

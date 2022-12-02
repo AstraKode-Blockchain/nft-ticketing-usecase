@@ -11,7 +11,7 @@ const MarketPlaceMain1155 = artifacts.require(
 );
 const assert = require("assert");
 var Web3EthContract = require("web3-eth-contract");
-Web3EthContract.setProvider("ws://localhost:9545");
+Web3EthContract.setProvider("ws://localhost:7545");
 
 let nftContract;
 let mainContract;
@@ -183,11 +183,15 @@ contract("1. Main contract test", function (accounts) {
     assert.equal(result[4], 100000, "Error: Invalid maxInfection");
   });
 
-  it('1.10 Try to refund client', async () => {
+  it("1.10 Try to refund client", async () => {
     var price = web3.utils.toWei("0.5", "ether");
     var beforeRefund = await web3.eth.getBalance(accounts[1]);
-    await mainContract.refundUsers([accounts[1]], 1, { value: price});
+    await mainContract.refundUsers([accounts[1]], 1, { value: price });
     var afterRefund = await web3.eth.getBalance(accounts[1]);
-    assert.notEqual(beforeRefund, afterRefund, "Error: The account didn't refunded");
+    assert.notEqual(
+      beforeRefund,
+      afterRefund,
+      "Error: The account didn't refunded"
+    );
   });
 });

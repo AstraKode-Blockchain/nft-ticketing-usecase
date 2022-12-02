@@ -10,20 +10,24 @@ const Refunded = artifacts.require("Refunded");
 const NFTContract = artifacts.require("NFTContract");
 const Main = artifacts.require("Main");
 
-var Web3EthContract = require("web3-eth-contract");
-Web3EthContract.setProvider("ws://localhost:9545");
+//var Web3EthContract = require("web3-eth-contract");
 
-let web3 = new Web3(Web3.givenProvider || "ws://localhost:9545");
-let accounts;
+//Web3EthContract.setProvider(Web3.givenProvider);
+//let web3 = new Web3(Web3.currentProvider);
+//App.web3Provider = web3.currentProvider;
+//web3 = new Web3(web3.currentProvider);
+//let web3 = new Web3(Web3.givenProvider);
+let accounts = ["0xCc403c230E7c0E764122525bC8050Da8c47d8CeD"];
+console.log(accounts);
 
 module.exports = async function (deployer) {
   // retrieves truffle accounts list instead of hardcoding
-  try {
-    accounts = await web3.eth.getAccounts();
-    console.log(accounts);
-  } catch (error) {
-    console.error(error);
-  }
+  // try {
+  //   accounts = await web3.eth.getAccounts();
+  //   console.log(accounts);
+  // } catch (error) {
+  //   console.error(error);
+  // }
 
   await deployer.deploy(Counters);
   await deployer.deploy(MarketItemData);
