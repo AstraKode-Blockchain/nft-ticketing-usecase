@@ -20,6 +20,7 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const fs = require("fs");
 const mnemonic = "";
+
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 //
 // const fs = require('fs');
@@ -43,12 +44,16 @@ module.exports = {
       network_id: "*", // match any network id
     },
     matic: {
-      provider: () =>
-        new HDWalletProvider(mnemonic, `https://rpc-mumbai.maticvigil.com`),
+      provider: new HDWalletProvider(
+        mnemonic,
+        `https://rpc-mumbai.maticvigil.com`
+      ),
       network_id: 80001,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true,
+      gasLimit: 20000000,
+      networkCheckTimeoutnetworkCheckTimeout: 10000,
     },
   },
 
