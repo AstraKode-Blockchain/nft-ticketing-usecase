@@ -10,8 +10,9 @@ contract Refunded is RefundedData {
     Counters.Counter private _itemIds;
 
     constructor() {}
+
     //test event
-    
+
     /**
      * @dev Store refund parameters in a map (map declared in the RefundedData library).
      * Reverts if one of the owner and NFT contract addresses is equal to 0.
@@ -63,7 +64,6 @@ contract Refunded is RefundedData {
             refundUtils.idRefundParameters[itemId].owner,
             msg.sender
         )
-        
     {
         //  require(APIConsumer.volume >=  idRefundParameters[itemId].maxInfection);
         uint256 length = clients.length;
