@@ -25,32 +25,30 @@ contract GetInfected is ChainlinkClient, Ownable {
         setChainlinkToken(mumbaiLINKContract);
         oracle = 0x0bDDCD124709aCBf9BB3F824EbC61C87019888bb;
         jobId = "2bb15c3f9cfc4336b95012872ff05092";
-        fee = 100; // (Varies by network and job)
+        fee = 0.01 * 10 ** 18; // (Varies by network and job)
     }
 
     // Create a Chainlink request to retrieve API response
     function requestVolumeData() public returns (bytes32 requestId) {
         bytes32 reqId;
 
-        Chainlink.Request memory request;
-        request = buildChainlinkRequest(
+        Chainlink.Request memory request = buildChainlinkRequest(
             jobId,
             address(this),
             this.fulfill.selector
         );
 
         // Set the URL to perform the GET request on
-        Chainlink.add(
-            request,
+        request.add(
             "get",
             "https://api.apify.com/v2/key-value-stores/vqnEUe7VtKNMqGqFF/records/LATEST?disableRedirect=true"
         );
 
         // Fill required request arguments
-        Chainlink.add(request, "path", "infectedByRegion.2.infectedCount");
+        request.add("path", "infectedByRegion,2,infectedCount");
 
         // Multiply the result by 1000000000000000000 to remove decimals
-        Chainlink.addInt(request, "times", 10 ** 18);
+        request.addInt("times", 10 ** 18);
 
         reqId = sendChainlinkRequestTo(oracle, request, fee);
 
