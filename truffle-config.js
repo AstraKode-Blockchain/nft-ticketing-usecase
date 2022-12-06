@@ -52,7 +52,7 @@ module.exports = {
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true,
-      gasLimit: 20000000,
+      gasLimit: 40000000,
       networkCheckTimeoutnetworkCheckTimeout: 10000,
     },
   },
