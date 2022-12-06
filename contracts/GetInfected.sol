@@ -2,7 +2,6 @@
 pragma solidity ^0.8.7;
 
 // Imports
-import "../utils/Chainlink.sol";
 import "../utils/ChainlinkClient.sol";
 import "../utils/Ownable.sol";
 
@@ -12,6 +11,8 @@ interface IERC20 {
 
 // Define contract that extends ChainlinkClient
 contract GetInfected is ChainlinkClient, Ownable {
+    using Chainlink for Chainlink.Request;
+
     // Declare contract-wide variables
     uint256 public volume;
     address private oracle;
