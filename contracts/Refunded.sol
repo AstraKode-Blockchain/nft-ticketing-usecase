@@ -63,7 +63,9 @@ contract Refunded is RefundedData {
             refundUtils.idRefundParameters[itemId].owner,
             msg.sender
         )
+        
     {
+        //  require(APIConsumer.volume >=  idRefundParameters[itemId].maxInfection);
         uint256 length = clients.length;
         refundUtils.idRefundParameters[itemId].refunded = true;
         for (uint256 i = 0; i < length; i++) {
