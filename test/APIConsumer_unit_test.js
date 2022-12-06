@@ -2,8 +2,8 @@
 // const { network, deployments, ethers } = require("hardhat");
 // const { developmentChains } = require("../../helper-hardhat-config");
 // const { numToBytes32 } = require("@chainlink/test-helpers/dist/src/helpers");
-
-// !developmentChains.includes(network.name)
+//test oracle separatly -> deploy getInfected -> send link to metamask (wrapped one for matic) -> try to call getInfectVolume
+// !developmentChains.includes(network.name) move infected to diff migration file
 //   ? describe.skip
 //   : describe("APIConsumer Unit Tests", async function() {
 //       let apiConsumer, linkToken, mockOracle;
