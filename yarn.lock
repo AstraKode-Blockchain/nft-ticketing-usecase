@@ -225,12 +225,14 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     "to-fast-properties" "^2.0.0"
 
-"@chainlink/contracts@^0.4.2":
-  "integrity" "sha512-wVI/KZ9nIH0iqoebVxYrZfNVWO23vwds1UrHdbF+S0JwyixtT+54xYGlot723jCrAeBeQHsDRQXnEhhbUEHpgQ=="
-  "resolved" "https://registry.npmjs.org/@chainlink/contracts/-/contracts-0.4.2.tgz"
-  "version" "0.4.2"
+"@chainlink/contracts@^0.5.1":
+  "integrity" "sha512-3PDBJ38Sd6Ml9h7FNK/tZQti+kTCdXUq1qzE6E59CnlzycsV9ElPvf2hTvs9Mi9C6pEx2Mmw9yhZMfBktYUInQ=="
+  "resolved" "https://registry.npmjs.org/@chainlink/contracts/-/contracts-0.5.1.tgz"
+  "version" "0.5.1"
   dependencies:
     "@eth-optimism/contracts" "^0.5.21"
+    "@openzeppelin/contracts" "^4.3.3"
+    "@openzeppelin/contracts-v0.7" "npm:@openzeppelin/contracts@v3.4.2"
 
 "@chainlink/token@^1.1.0":
   "integrity" "sha512-/HK9szSi/rIgsscZs1hE/HY03ZWy2pgSdSW1N5QiEmCyo8FzDoeaN0Q+pkwf+tGVmQtLvKvpvCmQ5xAZngLlmQ=="
@@ -739,10 +741,20 @@
   "resolved" "https://registry.npmjs.org/@noble/secp256k1/-/secp256k1-1.6.3.tgz"
   "version" "1.6.3"
 
+"@openzeppelin/contracts-v0.7@npm:@openzeppelin/contracts@v3.4.2":
+  "integrity" "sha512-z0zMCjyhhp4y7XKAcDAi3Vgms4T2PstwBdahiO0+9NaGICQKjynK3wduSRplTgk4LXmoO1yfDGO5RbjKYxtuxA=="
+  "resolved" "https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-3.4.2.tgz"
+  "version" "3.4.2"
+
 "@openzeppelin/contracts@^3.4.0":
   "integrity" "sha512-z0zMCjyhhp4y7XKAcDAi3Vgms4T2PstwBdahiO0+9NaGICQKjynK3wduSRplTgk4LXmoO1yfDGO5RbjKYxtuxA=="
   "resolved" "https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-3.4.2.tgz"
   "version" "3.4.2"
+
+"@openzeppelin/contracts@^4.3.3":
+  "integrity" "sha512-AGuwhRRL+NaKx73WKRNzeCxOCOCxpaqF+kp8TJ89QzAipSwZy/NoflkWaL9bywXFRhIzXt8j38sfF7KBKCPWLw=="
+  "resolved" "https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.8.0.tgz"
+  "version" "4.8.0"
 
 "@scure/base@~1.1.0":
   "integrity" "sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA=="

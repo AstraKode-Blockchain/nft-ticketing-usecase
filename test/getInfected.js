@@ -1,8 +1,8 @@
 //import fetch from "node-fetch";
 const Web3 = require("web3");
 var Contract = require("web3-eth-contract");
-const LinkToken = require("../node_modules/@chainlink/contracts/abi/v0.4/LinkToken.json");
-
+const LinkToken = artifacts.require("LinkToken");
+const { fundContractWithLink } = require("../jsutils/fundContract");
 // set provider for all later instances to use
 const GetInfected = artifacts.require("../contracts/GetInfected");
 const assert = require("assert");
@@ -342,12 +342,12 @@ contract("1. GetInfected contract test", function (accounts) {
   before(async () => {
     getInfected = await GetInfected.deployed();
 
-    const res = await fetch(
-      "https://api.apify.com/v2/key-value-stores/vqnEUe7VtKNMqGqFF/records/LATEST?disableRedirect=true%27"
-    );
+    // const res = await fetch(
+    //   "https://api.apify.com/v2/key-value-stores/vqnEUe7VtKNMqGqFF/records/LATEST?disableRedirect=true%27"
+    // );
 
-    obj = await res.json();
-    console.log(obj);
+    // obj = await res.json();
+    // console.log(obj);
   });
 
   it("1.1 Try to get infected parameters from api", async () => {
@@ -358,7 +358,7 @@ contract("1. GetInfected contract test", function (accounts) {
 
   it("1.2 Try to get infected parameters from oracle", async () => {
     linkToken = await LinkToken.at(linkAddress);
-    const tx = await linkToken.transfer(getInfected.address, payment);
+    await fundContractWithLink(getInfected.address);
 
     // let linkContract = new web3.eth.Contract(abi, linkAddress);
     // let tx = await linkContract.methods.transfer(getInfected.address, payment);

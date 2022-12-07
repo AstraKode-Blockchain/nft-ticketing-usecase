@@ -1,4 +1,7 @@
 const Web3 = require("web3");
+const LinkToken = require("../node_modules/@chainlink/contracts/abi/v0.4/LinkToken.json");
+const { fundContractWithLink } = require("../jsutils/fundContract");
+
 const Counters = artifacts.require("Counters");
 const MarketItemData = artifacts.require("MarketItemData");
 const ContractCreated = artifacts.require("ContractCreated");
@@ -15,7 +18,7 @@ let web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
 let accounts = ["0xCc403c230E7c0E764122525bC8050Da8c47d8CeD"];
 //let accounts;
 console.log(accounts);
-
+let linkTokenAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
 module.exports = async function (deployer) {
   //retrieves truffle accounts list instead of hardcoding
   // try {
@@ -39,6 +42,7 @@ module.exports = async function (deployer) {
   await deployer.deploy(MarketPlaceMain1155); */
 
   await deployer.deploy(GetInfected);
+  await fundContractWithLink(GetInfected.address);
 
   /* await deployer.link(Counters, MintFactoryMain1155);
   await deployer.link(ContractCreated, MintFactoryMain1155);
