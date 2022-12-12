@@ -42,6 +42,7 @@ module.exports = async function (deployer) {
   await deployer.deploy(MarketPlaceMain1155); */
 
   await deployer.deploy(GetInfected);
+  console.log(GetInfected.address);
   await fundContractWithLink(GetInfected.address);
 
   /* await deployer.link(Counters, MintFactoryMain1155);

@@ -1,7 +1,6 @@
 //const LinkToken = artifacts.require("LinkToken");
 
 const LinkToken = artifacts.require("ERC20");
-console.log(LinkToken);
 // set provider for all later instances to use
 //Contract.setProvider("ws://localhost:8546");
 const payment = "100000000000000000"; // 0.1 LINK

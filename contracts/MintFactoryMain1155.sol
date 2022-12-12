@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.4.25 <0.9.0;
 
 import "./NFTContract.sol";
 import "../utils/Counters.sol";

@@ -751,7 +751,7 @@
   "resolved" "https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-3.4.2.tgz"
   "version" "3.4.2"
 
-"@openzeppelin/contracts@^4.3.3":
+"@openzeppelin/contracts@^4.3.3", "@openzeppelin/contracts@^4.8.0":
   "integrity" "sha512-AGuwhRRL+NaKx73WKRNzeCxOCOCxpaqF+kp8TJ89QzAipSwZy/NoflkWaL9bywXFRhIzXt8j38sfF7KBKCPWLw=="
   "resolved" "https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.8.0.tgz"
   "version" "4.8.0"
