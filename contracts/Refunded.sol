@@ -49,6 +49,7 @@ contract Refunded is RefundedData {
 
     /**
      * @notice Utilizing alreadyRefunded and ownerEqualToSender from RefundedData.
+     * Reverts if max infection of item id is bigger then APIConsumer.volume.
      * @dev Refund all the buyer of the item.
      * @param clients The addresses need to be refunded.
      * @param itemId The item id.
