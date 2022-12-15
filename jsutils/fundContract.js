@@ -7,7 +7,7 @@ const payment = "100000000000000000"; // 0.1 LINK
 
 async function fundContractWithLink(contractAddress) {
   let linkToken;
-  //try erc ERC20oken
+  //try erc ERC20token
   linkToken = await LinkToken.at("0x326C977E6efc84E512bB9C30f76E30c160eD06FB");
 
   try {
