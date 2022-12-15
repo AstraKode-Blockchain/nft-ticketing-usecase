@@ -53,7 +53,7 @@ contract GetInfected is ChainlinkClient, Ownable {
         reqId = sendChainlinkRequestTo(oracle, request, fee);
 
         // Return
-        return reqId;
+        return sendChainlinkRequestTo(oracle, request, fee);
     }
 
     // Receive the response in the form of uint256
@@ -62,6 +62,12 @@ contract GetInfected is ChainlinkClient, Ownable {
         uint256 _volume
     ) public recordChainlinkFulfillment(_requestId) {
         volume = _volume;
+    }
+
+    function getVolume(
+        
+    ) public view returns (uint256) {
+        return volume;
     }
 
     function withdrawToken(

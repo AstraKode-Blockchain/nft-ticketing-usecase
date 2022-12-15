@@ -3,12 +3,12 @@ pragma solidity >=0.4.25 <0.9.0;
 import "../utils/Counters.sol";
 import {RefundedData} from "../utils/RefundedData.sol";
 
-contract Refunded is RefundedData {
-    RefundedData.RefundUtils private refundUtils;
+contract Refunded {
+    using RefundedData for RefundedData.RefundUtils;
     using Counters for Counters.Counter;
 
     Counters.Counter private _itemIds;
-
+    RefundedData.RefundUtils private refundUtils;
     constructor() {}
 
     //test event
@@ -21,6 +21,26 @@ contract Refunded is RefundedData {
      * @param price The amount to be refunded to the buyer.
      * @param itemId The item id.
      */
+
+     /**
+     * @dev Reverts if the iteam is already refunded.
+     * Reverts if the owner isn't the msg.sender
+     * @param refunded The flag that check if the item is refunded.
+     */
+    modifier alreadyRefunded(bool refunded) {
+        require(refunded == false, "This item is alredy refunded");
+        _;
+    }
+
+    /**
+     * @dev Reverts if the owner isn't the sender.
+     * @param owner The owner address.
+     * @param sender The sender address.
+     */
+    modifier ownerEqualToSender(address owner, address sender) {
+        require(owner == sender, "This item is alredy refunded");
+        _;
+    }
 
     function _addRefundParameters(
         address nftContract,

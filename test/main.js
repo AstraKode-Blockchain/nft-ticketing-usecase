@@ -23,7 +23,7 @@ let nftAddress;
 
 contract("1. Main contract test", function (accounts) {
   before(async () => {
-    // nftContract = await NFTContract.deployed();
+    nftContract = await NFTContract.deployed();
     console.log(accounts[0]);
 
     marketItemContract = await MarketItemMain.deployed();

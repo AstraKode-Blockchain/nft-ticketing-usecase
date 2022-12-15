@@ -28,9 +28,9 @@ module.exports = async function (deployer) {
   //   console.error(error);
   // }
 
-  await deployer.deploy(Counters);
+  /* await deployer.deploy(Counters);
+  await deployer.deploy(RefundedData);
   await deployer.deploy(MarketItemData);
-  //await deployer.deploy(RefundedData);
   await deployer.deploy(ContractCreated);
 
   await deployer.link(Counters, MarketItemMain);
@@ -39,13 +39,13 @@ module.exports = async function (deployer) {
 
   await deployer.link(Counters, MarketPlaceMain1155);
   await deployer.link(MarketItemData, MarketPlaceMain1155);
-  await deployer.deploy(MarketPlaceMain1155);
+  await deployer.deploy(MarketPlaceMain1155); */
 
-  //await deployer.deploy(GetInfected);
-  //console.log(GetInfected.address);
-  //await fundContractWithLink(GetInfected.address);
+  await deployer.deploy(GetInfected);
+  console.log(GetInfected.address);
+  await fundContractWithLink(GetInfected.address);
 
-  await deployer.link(Counters, MintFactoryMain1155);
+  /* await deployer.link(Counters, MintFactoryMain1155);
   await deployer.link(ContractCreated, MintFactoryMain1155);
   await deployer.deploy(MintFactoryMain1155, accounts[0], accounts[0]);
 
@@ -58,7 +58,7 @@ module.exports = async function (deployer) {
   );
   await deployer.deploy(Refunded);
   await deployer.link(Counters, Refunded);
-  //await deployer.link(RefundedData, Refunded);
+  await deployer.link(RefundedData, Refunded);
   console.log("Refunded: " + Refunded.address);
   await deployer.link(MarketItemData, Main);
   await deployer.deploy(
@@ -66,6 +66,6 @@ module.exports = async function (deployer) {
     MarketPlaceMain1155.address,
     Refunded.address,
     MintFactoryMain1155.address,
-    NFTContract.address
-  );
+    NFTContract.address 
+  );*/
 };

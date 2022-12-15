@@ -211,6 +211,7 @@ contract Main is
             payable(contractsAddressesData._refundedContractAddress),
             msg.value
         );
+        //value>= price * by array
 
         Refunded callee = Refunded(
             contractsAddressesData._refundedContractAddress
