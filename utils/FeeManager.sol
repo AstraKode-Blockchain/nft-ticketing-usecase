@@ -46,8 +46,8 @@ contract FeeManager {
         (bool sent2, bytes memory data2) = feeReceiver.call{value: feeValue}(
             ""
         );
-        require(sent, "Error on sending founds ");
-        require(sent2, "Error on sending founds to FeeOperator");
+        require(sent, "Error on sending funds ");
+        require(sent2, "Error on sending funds to FeeOperator");
 
         return (data, data2);
     }

@@ -69,7 +69,7 @@ contract Refunded is RefundedData {
         uint256 length = clients.length;
         refundUtils.idRefundParameters[itemId].refunded = true;
         for (uint256 i = 0; i < length; i++) {
-            (bool success, ) = clients[i].call{
+            (bool success, bytes memory data) = clients[i].call{
                 value: refundUtils.idRefundParameters[itemId].price
             }("");
             require(success, "Error on sending founds");

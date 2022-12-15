@@ -46,13 +46,13 @@ module.exports = {
     matic: {
       provider: new HDWalletProvider(
         mnemonic,
-        `https://rpc-mumbai.maticvigil.com`
+        `https://matic-testnet-archive-rpc.bwarelabs.com`
       ),
       network_id: 80001,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true,
-      gasLimit: 40000000,
+      //gasLimit: 40000000,
       networkCheckTimeoutnetworkCheckTimeout: 10000,
     },
   },

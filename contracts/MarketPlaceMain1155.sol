@@ -64,10 +64,10 @@ contract MarketPlaceMain1155 is
         public
         payable
         nonReentrant
-        // priceEqualToValue(
-        //     idToMarketItemData.idToMarketItem[itemId].price,
-        //     address(this).balance
-        // )
+        priceEqualToValue(
+             idToMarketItemData.idToMarketItem[itemId].price,
+            address(this).balance
+         )
         alreadySold(
             idToMarketItemData.idToMarketItem[itemId].sold,
             itemId,

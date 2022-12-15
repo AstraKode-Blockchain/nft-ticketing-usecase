@@ -7,9 +7,9 @@ abstract contract MarketPlaceData {
      * @param value The NFT value.
      * @param price The bid price.
      */
-    modifier priceEqualToValue(uint value, uint price) {
+    modifier priceEqualToValue(uint price, uint value) {
         require(
-            value == price,
+            value >= price,
             "Please submit the asking price in order to complete the purchase"
         );
         _;

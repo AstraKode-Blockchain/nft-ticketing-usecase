@@ -94,7 +94,7 @@ contract("1. Main contract test", function (accounts) {
 
   it("1.5 Check if item created", async () => {
     var tokenIds = [1];
-    var price = web3.utils.toWei("0.5", "ether");
+    var price = web3.utils.toWei("0.01", "ether");
     var amounts = [1];
     var returnValues = await mainContract.createMarketItem(
       nftContract.address,
@@ -107,7 +107,7 @@ contract("1. Main contract test", function (accounts) {
   });
 
   it("1.6 Try to create a sale", async () => {
-    var price = web3.utils.toWei("0.5", "ether");
+    var price = web3.utils.toWei("0.02", "ether");
     // await web3.eth.sendTransaction({to:marketPlaceContract.address, from:accounts[5], value: price});
     var itemId = 1;
     var tokenIds = [1];
@@ -123,9 +123,10 @@ contract("1. Main contract test", function (accounts) {
     console.log(balance);
     let balance2 = await web3.eth.getBalance(marketPlaceContract.address);
     console.log(balance2);
+    //check if you have nft erc1155 get balance of
   });
 
-  it("1.7 Try to approve the refunded contract", async () => {
+  /*  it("1.7 Try to approve the refunded contract", async () => {
     var event = await nftContract.setApprovalForAll(
       refundedContract.address,
       true
@@ -149,9 +150,9 @@ contract("1. Main contract test", function (accounts) {
       "Invalid event emitted"
     );
   });
-
+ */
   it("1.8 Try to add refund parameters", async () => {
-    var price = web3.utils.toWei("0.5", "ether");
+    var price = web3.utils.toWei("0.01", "ether");
     var event = await mainContract.addRefundParameters(
       nftContract.address,
       100000,
@@ -169,7 +170,7 @@ contract("1. Main contract test", function (accounts) {
   });
 
   it("1.9 Try to fetch refund parameters", async () => {
-    var price = web3.utils.toWei("0.5", "ether");
+    var price = web3.utils.toWei("0.01", "ether");
     var result = await mainContract.fetchParameters.call(1);
     console.log("---------------------------------");
     console.log(result);
@@ -184,7 +185,7 @@ contract("1. Main contract test", function (accounts) {
   });
 
   it("1.10 Try to refund client", async () => {
-    var price = web3.utils.toWei("0.5", "ether");
+    var price = web3.utils.toWei("0.02", "ether");
     var beforeRefund = await web3.eth.getBalance(accounts[1]);
     await mainContract.refundUsers([accounts[1]], 1, { value: price });
     var afterRefund = await web3.eth.getBalance(accounts[1]);

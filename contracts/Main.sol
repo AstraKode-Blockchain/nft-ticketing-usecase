@@ -18,6 +18,7 @@ contract Main is
     MarketItemMain,
     FeeManager
 {
+    //marktetItem main to external call
     // address private _marketItemContractAddress;
     using MarketItemData for *;
 
@@ -36,7 +37,8 @@ contract Main is
         address refundedContractAddress,
         address mintFactoryContractAddress,
         address nftContractAddress
-    ) FeeManager(owner()) {
+    ) FeeManager(msg.sender) {
+        setFee(10);
         contractsAddressesData._marketPlaceContractAddress = payable(
             marketPlaceContractAddress
         );
@@ -132,6 +134,8 @@ contract Main is
         MarketPlaceMain1155 callee = MarketPlaceMain1155(
             payable(contractsAddressesData._marketPlaceContractAddress)
         );
+
+
 
         (bytes memory data, bytes memory data2) = transferWithFee(
             payable(contractsAddressesData._marketPlaceContractAddress),
