@@ -12,7 +12,6 @@ contract Refunded {
 
     constructor() {}
 
-    //test event
 
     /**
      * @dev Store refund parameters in a map (map declared in the RefundedData library).
@@ -66,6 +65,8 @@ contract Refunded {
             maxInfection,
             false
         );
+
+        emit RefundedData.RefundParametersAdded(nftContract, maxInfection, price, itemId);
     }
 
     /**

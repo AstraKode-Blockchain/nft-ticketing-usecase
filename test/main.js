@@ -13,6 +13,7 @@ const assert = require("assert");
 var Web3EthContract = require("web3-eth-contract");
 Web3EthContract.setProvider("ws://localhost:7545");
 
+const isRefundEnabled = false;
 let nftContract;
 let mainContract;
 let marketItemContract;
@@ -20,7 +21,7 @@ let marketPlaceContract;
 let refundedContract;
 let mintFactory;
 let nftAddress;
-
+let refundedAddress;
 contract("1. Main contract test", function (accounts) {
   before(async () => {
     nftContract = await NFTContract.deployed();
@@ -29,7 +30,13 @@ contract("1. Main contract test", function (accounts) {
     marketItemContract = await MarketItemMain.deployed();
     marketPlaceContract = await MarketPlaceMain1155.deployed();
     mintFactory = await MintFactoryMain1155.deployed(accounts[0], accounts[0]);
-    refundedContract = await Refunded.deployed();
+
+    if (isRefundEnabled) {
+      refundedContract = await Refunded.deployed();
+      refundedAddress = refundedContract.address;
+    } else {
+      refundedAddress = "0x0000000000000000000000000000000000000000";
+    }
 
     var res = await mintFactory._deployCollection(
       "uri",
@@ -47,7 +54,7 @@ contract("1. Main contract test", function (accounts) {
 
     mainContract = await Main.deployed(
       marketPlaceContract.address,
-      refundedContract.address,
+      refundedAddress,
       mintFactory.address,
       nftAddress
     );
@@ -126,73 +133,61 @@ contract("1. Main contract test", function (accounts) {
     //check if you have nft erc1155 get balance of
   });
 
-  /*  it("1.7 Try to approve the refunded contract", async () => {
-    var event = await nftContract.setApprovalForAll(
-      refundedContract.address,
-      true
-    );
-    var flag = await nftContract.isApprovedForAll(
-      accounts[0],
-      refundedContract.address
-    );
-    console.log("----------");
-    //console.log(event);
-    truffleAssert.eventEmitted(event, "ApprovalForAll");
-
-    assert(
-      flag,
-      "A contract address has not been approved by the NFT contract"
-    );
-
-    assert.equal(
-      event.logs[0].event,
-      "ApprovalForAll",
-      "Invalid event emitted"
-    );
-  });
- */
   it("1.8 Try to add refund parameters", async () => {
-    var price = web3.utils.toWei("0.01", "ether");
-    var event = await mainContract.addRefundParameters(
-      nftContract.address,
-      100000,
-      price,
-      1
-    );
+    console.log("Refunded address: " + refundedAddress);
+    if (refundedAddress != "0x0000000000000000000000000000000000000000") {
+      var price = web3.utils.toWei("0.01", "ether");
+      var event = await mainContract.addRefundParameters(
+        nftContract.address,
+        100000,
+        price,
+        1
+      );
 
-    truffleAssert.eventEmitted(event, "RefundParametersAdded");
+      truffleAssert.eventEmitted(event, "RefundParametersAdded");
 
-    assert.equal(
-      event.logs[0].event,
-      "RefundParametersAdded",
-      "Invalid event emitted"
-    );
+      assert.equal(
+        event.logs[0].event,
+        "RefundParametersAdded",
+        "Invalid event emitted"
+      );
+    } else {
+      console.log("Refunds not enabled");
+    }
   });
 
   it("1.9 Try to fetch refund parameters", async () => {
-    var price = web3.utils.toWei("0.01", "ether");
-    var result = await mainContract.fetchParameters.call(1);
-    console.log("---------------------------------");
-    console.log(result);
-    assert.equal(result[0], 1, "Error: Invalid item id");
-    assert.equal(
-      result[1],
-      nftContract.address,
-      "Error: Invalid NFT contract address"
-    );
-    assert.equal(result[3], price, "Error: Invalid price");
-    assert.equal(result[4], 100000, "Error: Invalid maxInfection");
+    if (refundedAddress != "0x0000000000000000000000000000000000000000") {
+      var price = web3.utils.toWei("0.01", "ether");
+      var result = await mainContract.fetchParameters.call(1);
+      console.log("---------------------------------");
+      console.log(result);
+      assert.equal(result[0], 1, "Error: Invalid item id");
+      assert.equal(
+        result[1],
+        nftContract.address,
+        "Error: Invalid NFT contract address"
+      );
+      assert.equal(result[3], price, "Error: Invalid price");
+      assert.equal(result[4], 100000, "Error: Invalid maxInfection");
+    } else {
+      console.log("Refunds not enabled");
+    }
   });
 
   it("1.10 Try to refund client", async () => {
-    var price = web3.utils.toWei("0.02", "ether");
-    var beforeRefund = await web3.eth.getBalance(accounts[1]);
-    await mainContract.refundUsers([accounts[1]], 1, { value: price });
-    var afterRefund = await web3.eth.getBalance(accounts[1]);
-    assert.notEqual(
-      beforeRefund,
-      afterRefund,
-      "Error: The account didn't refunded"
-    );
+    if (refundedAddress != "0x0000000000000000000000000000000000000000") {
+      var price = web3.utils.toWei("0.02", "ether");
+      var beforeRefund = await web3.eth.getBalance(accounts[1]);
+      await mainContract.refundUsers([accounts[1]], 1, { value: price });
+      var afterRefund = await web3.eth.getBalance(accounts[1]);
+      assert.notEqual(
+        beforeRefund,
+        afterRefund,
+        "Error: The account didn't refunded"
+      );
+    } else {
+      console.log("Refunds not enabled");
+    }
   });
 });

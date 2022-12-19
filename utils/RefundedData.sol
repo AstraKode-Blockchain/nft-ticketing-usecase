@@ -16,23 +16,12 @@ library RefundedData {
         mapping(uint256 => RefundParameters) idRefundParameters;
     }
 
-    /**
-     * @dev Reverts if the iteam is already refunded.
-     * Reverts if the owner isn't the msg.sender
-     * @param refunded The flag that check if the item is refunded.
-     */
-    modifier alreadyRefunded(bool refunded) {
-        require(refunded == false, "This item is alredy refunded");
-        _;
-    }
+    
 
-    /**
-     * @dev Reverts if the owner isn't the sender.
-     * @param owner The owner address.
-     * @param sender The sender address.
-     */
-    modifier ownerEqualToSender(address owner, address sender) {
-        require(owner == sender, "This item is alredy refunded");
-        _;
-    }
+    event RefundParametersAdded(
+        address nftContract,
+        uint256 maxInfection,
+        uint256 price,
+        uint256 itemId
+    );
 }

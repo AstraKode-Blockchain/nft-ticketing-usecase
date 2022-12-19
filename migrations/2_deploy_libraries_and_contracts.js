@@ -16,7 +16,10 @@ const RefundedData = artifacts.require("RefundedData");
 let web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
 
 let accounts = ["0xCc403c230E7c0E764122525bC8050Da8c47d8CeD"];
-let isRefundEnabled = true;
+
+//flag for enabling/disabling refunds
+const isRefundEnabled = false;
+
 let linkTokenAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
 module.exports = async function (deployer) {
   let refundedAdress = "0x0000000000000000000000000000000000000000";
@@ -28,8 +31,8 @@ module.exports = async function (deployer) {
   //   console.error(error);
   // }
 
-  /* await deployer.deploy(Counters);
-  
+  await deployer.deploy(Counters);
+
   await deployer.deploy(MarketItemData);
   await deployer.deploy(ContractCreated);
 
@@ -39,7 +42,7 @@ module.exports = async function (deployer) {
 
   await deployer.link(Counters, MarketPlaceMain1155);
   await deployer.link(MarketItemData, MarketPlaceMain1155);
-  await deployer.deploy(MarketPlaceMain1155); */
+  await deployer.deploy(MarketPlaceMain1155);
   if (isRefundEnabled) {
     await deployer.deploy(RefundedData);
     await deployer.deploy(GetInfected);
@@ -56,7 +59,7 @@ module.exports = async function (deployer) {
     console.log("Refunds Disabled");
   }
 
-  /* await deployer.link(Counters, MintFactoryMain1155);
+  await deployer.link(Counters, MintFactoryMain1155);
   await deployer.link(ContractCreated, MintFactoryMain1155);
   await deployer.deploy(MintFactoryMain1155, accounts[0], accounts[0]);
 
@@ -67,13 +70,13 @@ module.exports = async function (deployer) {
     [1],
     accounts[0]
   );
-  
+
   await deployer.link(MarketItemData, Main);
   await deployer.deploy(
     Main,
     MarketPlaceMain1155.address,
     refundedAdress,
     MintFactoryMain1155.address,
-    NFTContract.address 
-  );*/
+    NFTContract.address
+  );
 };

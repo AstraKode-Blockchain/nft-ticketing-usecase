@@ -7,11 +7,11 @@ import "../utils/ERC1155Receiver.sol";
 import {MarketItemData} from "../utils/MarketItemData.sol";
 import "../utils/MarketPlaceData.sol";
 import "../utils/ERC1155.sol";
-
+import "../utils/FeeManager.sol";
 contract MarketPlaceMain1155 is
     ReentrancyGuard,
     ERC1155Receiver,
-    MarketPlaceData
+    MarketPlaceData, FeeManager
 {
     using Counters for Counters.Counter;
     using MarketItemData for *;
@@ -21,7 +21,7 @@ contract MarketPlaceMain1155 is
 
     address public owner;
 
-    constructor() {
+    constructor() FeeManager(msg.sender){
         owner = msg.sender;
     }
 
@@ -59,7 +59,8 @@ contract MarketPlaceMain1155 is
         address toAddress,
         uint256 itemId,
         uint256[] memory _tokenIds,
-        uint256[] memory amounts
+        uint256[] memory amounts, 
+        address marketPlaceContractAddress
     )
         public
         payable
@@ -74,6 +75,10 @@ contract MarketPlaceMain1155 is
             toAddress
         )
     {
+        (bytes memory data, bytes memory data2) = transferWithFee(
+            payable(marketPlaceContractAddress),
+            idToMarketItemData.idToMarketItem[itemId].price
+        );
         idToMarketItemData.idToMarketItem[itemId].seller.call{
             value: idToMarketItemData.idToMarketItem[itemId].price
         };
