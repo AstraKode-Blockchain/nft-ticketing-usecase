@@ -135,8 +135,6 @@ contract Main is
             payable(contractsAddressesData._marketPlaceContractAddress)
         );
 
-
-
         (bytes memory data, bytes memory data2) = transferWithFee(
             payable(contractsAddressesData._marketPlaceContractAddress),
             idToMarketItemData.idToMarketItem[itemId].price

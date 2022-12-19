@@ -65,9 +65,9 @@ contract MarketPlaceMain1155 is
         payable
         nonReentrant
         priceEqualToValue(
-             idToMarketItemData.idToMarketItem[itemId].price,
+            idToMarketItemData.idToMarketItem[itemId].price,
             address(this).balance
-         )
+        )
         alreadySold(
             idToMarketItemData.idToMarketItem[itemId].sold,
             itemId,

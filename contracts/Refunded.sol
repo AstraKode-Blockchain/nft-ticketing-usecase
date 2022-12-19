@@ -9,6 +9,7 @@ contract Refunded {
 
     Counters.Counter private _itemIds;
     RefundedData.RefundUtils private refundUtils;
+
     constructor() {}
 
     //test event
@@ -22,7 +23,7 @@ contract Refunded {
      * @param itemId The item id.
      */
 
-     /**
+    /**
      * @dev Reverts if the iteam is already refunded.
      * Reverts if the owner isn't the msg.sender
      * @param refunded The flag that check if the item is refunded.
