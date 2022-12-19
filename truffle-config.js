@@ -19,7 +19,8 @@
  */
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const fs = require("fs");
-const mnemonic = "";
+const mnemonic =
+  "deputy primary snap shrug nest animal zero tonight fix name smile mixed";
 
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 //

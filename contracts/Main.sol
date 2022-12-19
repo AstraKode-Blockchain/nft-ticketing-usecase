@@ -31,6 +31,12 @@ contract Main is
 
     ContractsAddresses contractsAddressesData;
 
+    modifier isRefundEnabled{
+        require(address(contractsAddressesData._refundedContractAddress) != address(0));
+        _;   
+
+    }
+
     constructor(
         // address marketItemContractAddress,
         address marketPlaceContractAddress,
@@ -186,7 +192,7 @@ contract Main is
         uint256 maxInfection,
         uint256 price,
         uint256 itemId
-    ) public {
+    ) public isRefundEnabled{
         Refunded callee = Refunded(
             contractsAddressesData._refundedContractAddress
         );
@@ -201,10 +207,10 @@ contract Main is
      * @param clients The addresses need to be refunded.
      * @param itemId The item id.
      */
-    function refundUsers(
+    function refundUsers (
         address payable[] memory clients,
         uint256 itemId
-    ) public payable {
+    ) public payable isRefundEnabled{
         transferWithFee(
             payable(contractsAddressesData._refundedContractAddress),
             msg.value
@@ -225,7 +231,7 @@ contract Main is
      */
     function fetchParameters(
         uint256 itemId
-    ) public view returns (RefundedData.RefundParameters memory) {
+    ) public view isRefundEnabled returns (RefundedData.RefundParameters memory) {
         Refunded callee = Refunded(
             contractsAddressesData._refundedContractAddress
         );
