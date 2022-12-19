@@ -13,19 +13,39 @@ contract FeeManager {
         OperatorId[_operator] = true;
     }
 
+    /**
+     * @dev Reverts if the function caller isn't an operator .
+     * @param caller The address of the function caller.
+     */
     modifier isOperator(address caller) {
         require(OperatorId[caller] == true, "You Are Not an Operator");
         _;
     }
 
+    /**
+     * @notice Utilizing isOperator.
+     * @dev Add address to the operators mapping.
+     * @param newOperator Address to add to the operators mapping.
+     */
     function setOperator(address newOperator) public isOperator(msg.sender) {
         OperatorId[newOperator] = true;
     }
 
+    /**
+     * @notice Utilizing isOperator.
+     * @dev Set the new fee of a transaction.
+     * @param newFee The new fee of a transaction.
+     */
     function setFee(uint256 newFee) public isOperator(msg.sender) {
         fee = newFee;
     }
 
+    /**
+     * @notice Utilizing isOperator.
+     * @dev Set the transaction receiver address.
+     * Reverts if the transaction receiver isn't an operator
+     * @param newfeeReceiver The transaction receiver address.
+     */
     function setfeeReceiver(
         address payable newfeeReceiver
     ) public isOperator(msg.sender) {
