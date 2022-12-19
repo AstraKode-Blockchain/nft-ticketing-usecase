@@ -40,6 +40,7 @@ contract FeeManager {
         fee = newFee;
     }
 
+
     /**
      * @notice Utilizing isOperator.
      * @dev Set the transaction receiver address.
@@ -56,6 +57,12 @@ contract FeeManager {
         feeReceiver = newfeeReceiver;
     }
 
+    /**
+     * @dev Send ether with fee.
+     * @param _to The transaction receiver address.
+     * @param _value The transaction value.
+     * @return The data of the 2 call function.
+     */
     function transferWithFee(
         address payable _to,
         uint256 _value
