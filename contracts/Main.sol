@@ -15,8 +15,8 @@ contract Main is
     Ownable,
     ReentrancyGuard,
     ERC1155Receiver,
-    MarketItemMain,
-    FeeManager
+    MarketItemMain
+    
 {
     //marktetItem main to external call
     // address private _marketItemContractAddress;
@@ -45,8 +45,8 @@ contract Main is
         address refundedContractAddress,
         address mintFactoryContractAddress,
         address nftContractAddress
-    ) FeeManager(msg.sender) {
-        setFee(10);
+    ) {
+        //setFee(10); FeeManager(msg.sender)
         contractsAddressesData._marketPlaceContractAddress = payable(
             marketPlaceContractAddress
         );
@@ -143,18 +143,17 @@ contract Main is
             payable(contractsAddressesData._marketPlaceContractAddress)
         );
 
-        (bytes memory data, bytes memory data2) = transferWithFee(
+        /* (bytes memory data, bytes memory data2) = transferWithFee(
             payable(contractsAddressesData._marketPlaceContractAddress),
             idToMarketItemData.idToMarketItem[itemId].price
-        );
+        ); */
 
-        callee._createMarketSale(
+        (bytes memory data, bytes memory data2) = callee._createMarketSale(
             nftContract,
             msg.sender,
             itemId,
             _tokenIds,
-            amounts,
-            contractsAddressesData._marketPlaceContractAddress
+            amounts
         );
 
         return (data, data2);
@@ -205,10 +204,10 @@ contract Main is
         address payable[] memory clients,
         uint256 itemId
     ) public payable isRefundEnabled {
-        transferWithFee(
+       /*  transferWithFee(
             payable(contractsAddressesData._refundedContractAddress),
             msg.value
-        );
+        ); */
         //value>= price * by array
 
         Refunded callee = Refunded(

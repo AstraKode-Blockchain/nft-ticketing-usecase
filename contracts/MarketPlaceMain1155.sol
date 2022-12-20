@@ -24,6 +24,7 @@ contract MarketPlaceMain1155 is
     address public owner;
 
     constructor() FeeManager(msg.sender) {
+        setFee(10);
         owner = msg.sender;
     }
 
@@ -61,8 +62,7 @@ contract MarketPlaceMain1155 is
         address toAddress,
         uint256 itemId,
         uint256[] memory _tokenIds,
-        uint256[] memory amounts,
-        address marketPlaceContractAddress
+        uint256[] memory amounts
     )
         public
         payable
@@ -76,9 +76,9 @@ contract MarketPlaceMain1155 is
             itemId,
             toAddress
         )
-    {
+   returns (bytes memory, bytes memory) {
         (bytes memory data, bytes memory data2) = transferWithFee(
-            payable(marketPlaceContractAddress),
+            payable(address(this)),
             idToMarketItemData.idToMarketItem[itemId].price
         );
         idToMarketItemData.idToMarketItem[itemId].seller.call{
@@ -94,6 +94,7 @@ contract MarketPlaceMain1155 is
         idToMarketItemData.idToMarketItem[itemId].owner = payable(toAddress);
         _itemsSold.increment();
         idToMarketItemData.idToMarketItem[itemId].sold = true;
+        return (data, data2);
     }
 
     /**

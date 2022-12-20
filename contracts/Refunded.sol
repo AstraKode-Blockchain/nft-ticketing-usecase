@@ -2,15 +2,17 @@
 pragma solidity >=0.4.25 <0.9.0;
 import "../utils/Counters.sol";
 import {RefundedData} from "../utils/RefundedData.sol";
-
-contract Refunded {
+import "../utils/FeeManager.sol";
+contract Refunded is FeeManager{
     using RefundedData for RefundedData.RefundUtils;
     using Counters for Counters.Counter;
 
     Counters.Counter private _itemIds;
     RefundedData.RefundUtils private refundUtils;
 
-    constructor() {}
+    constructor() FeeManager(msg.sender) {
+        setFee(10);
+        }
 
     /**
      * @dev Store refund parameters in a map (map declared in the RefundedData library).
@@ -91,8 +93,12 @@ contract Refunded {
             refundUtils.idRefundParameters[itemId].owner,
             msg.sender
         )
-    {
+    {   
         //  require(APIConsumer.volume >=  idRefundParameters[itemId].maxInfection);
+         transferWithFee(
+            payable(address(this)),
+            msg.value
+        );
         uint256 length = clients.length;
         refundUtils.idRefundParameters[itemId].refunded = true;
         for (uint256 i = 0; i < length; i++) {

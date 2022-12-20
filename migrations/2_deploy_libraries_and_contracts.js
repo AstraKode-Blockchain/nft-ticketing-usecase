@@ -18,7 +18,7 @@ let web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
 let accounts = ["0xCc403c230E7c0E764122525bC8050Da8c47d8CeD"];
 
 //flag for enabling/disabling refunds
-const isRefundEnabled = false;
+const isRefundEnabled = true;
 
 let linkTokenAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
 module.exports = async function (deployer) {

@@ -9,12 +9,12 @@ const MintFactoryMain1155 = artifacts.require(
 const MarketPlaceMain1155 = artifacts.require(
   "../contracts/MarketPlaceMain1155"
 );
-const Attacker = artifacts.require("../utils/Attacker.sol");
+//const Attacker = artifacts.require("../utils/Attacker.sol");
 const assert = require("assert");
 var Web3EthContract = require("web3-eth-contract");
 Web3EthContract.setProvider("ws://localhost:7545");
 
-const isRefundEnabled = false;
+const isRefundEnabled = true;
 let nftContract;
 let mainContract;
 let marketItemContract;
@@ -23,7 +23,7 @@ let refundedContract;
 let mintFactory;
 let nftAddress;
 let refundedAddress;
-let attackerAddress;
+//let attackerAddress;
 
 contract("1. Main contract test", function (accounts) {
   before(async () => {
@@ -33,7 +33,7 @@ contract("1. Main contract test", function (accounts) {
     marketItemContract = await MarketItemMain.deployed();
     marketPlaceContract = await MarketPlaceMain1155.deployed();
     mintFactory = await MintFactoryMain1155.deployed(accounts[0], accounts[0]);
-    attackerAddress = await Attacker.deployed(marketItemContract.address);
+    //attackerAddress = await Attacker.deployed(marketItemContract.address);
 
     if (isRefundEnabled) {
       refundedContract = await Refunded.deployed();
@@ -208,5 +208,4 @@ contract("1. Main contract test", function (accounts) {
   //   nftAdd = returnValues.logs[0].args.nftContract;
   //   console.log(nftAdd);
   // });
-
 });
