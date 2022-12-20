@@ -16,8 +16,6 @@ library RefundedData {
         mapping(uint256 => RefundParameters) idRefundParameters;
     }
 
-    
-
     event RefundParametersAdded(
         address nftContract,
         uint256 maxInfection,

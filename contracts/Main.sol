@@ -31,10 +31,12 @@ contract Main is
 
     ContractsAddresses contractsAddressesData;
 
-    modifier isRefundEnabled{
-        require(address(contractsAddressesData._refundedContractAddress) != address(0));
-        _;   
-
+    modifier isRefundEnabled() {
+        require(
+            address(contractsAddressesData._refundedContractAddress) !=
+                address(0)
+        );
+        _;
     }
 
     constructor(
@@ -151,7 +153,8 @@ contract Main is
             msg.sender,
             itemId,
             _tokenIds,
-            amounts, contractsAddressesData._marketPlaceContractAddress
+            amounts,
+            contractsAddressesData._marketPlaceContractAddress
         );
 
         return (data, data2);
@@ -173,8 +176,6 @@ contract Main is
         return callee._fetchMarketItems();
     }
 
-    
-
     /**
      * @dev Call _addRefundParameters function from the Refunded contract.
      * @param nftContract The NFT contract address.
@@ -187,14 +188,12 @@ contract Main is
         uint256 maxInfection,
         uint256 price,
         uint256 itemId
-    ) public isRefundEnabled{
+    ) public isRefundEnabled {
         Refunded callee = Refunded(
             contractsAddressesData._refundedContractAddress
         );
 
         callee._addRefundParameters(nftContract, maxInfection, price, itemId);
-
-        
     }
 
     /**
@@ -202,10 +201,10 @@ contract Main is
      * @param clients The addresses need to be refunded.
      * @param itemId The item id.
      */
-    function refundUsers (
+    function refundUsers(
         address payable[] memory clients,
         uint256 itemId
-    ) public payable isRefundEnabled{
+    ) public payable isRefundEnabled {
         transferWithFee(
             payable(contractsAddressesData._refundedContractAddress),
             msg.value
@@ -226,7 +225,12 @@ contract Main is
      */
     function fetchParameters(
         uint256 itemId
-    ) public view isRefundEnabled returns (RefundedData.RefundParameters memory) {
+    )
+        public
+        view
+        isRefundEnabled
+        returns (RefundedData.RefundParameters memory)
+    {
         Refunded callee = Refunded(
             contractsAddressesData._refundedContractAddress
         );

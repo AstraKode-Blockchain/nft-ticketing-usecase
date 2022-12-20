@@ -12,7 +12,6 @@ contract Refunded {
 
     constructor() {}
 
-
     /**
      * @dev Store refund parameters in a map (map declared in the RefundedData library).
      * Reverts if one of the owner and NFT contract addresses is equal to 0.
@@ -66,7 +65,12 @@ contract Refunded {
             false
         );
 
-        emit RefundedData.RefundParametersAdded(nftContract, maxInfection, price, itemId);
+        emit RefundedData.RefundParametersAdded(
+            nftContract,
+            maxInfection,
+            price,
+            itemId
+        );
     }
 
     /**

@@ -40,7 +40,6 @@ contract FeeManager {
         fee = newFee;
     }
 
-
     /**
      * @notice Utilizing isOperator.
      * @dev Set the transaction receiver address.
