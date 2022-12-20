@@ -9,6 +9,7 @@ const MintFactoryMain1155 = artifacts.require(
 const MarketPlaceMain1155 = artifacts.require(
   "../contracts/MarketPlaceMain1155"
 );
+const Attacker = artifacts.require("../utils/Attacker.sol");
 const assert = require("assert");
 var Web3EthContract = require("web3-eth-contract");
 Web3EthContract.setProvider("ws://localhost:7545");
@@ -22,6 +23,8 @@ let refundedContract;
 let mintFactory;
 let nftAddress;
 let refundedAddress;
+let attackerAddress;
+
 contract("1. Main contract test", function (accounts) {
   before(async () => {
     nftContract = await NFTContract.deployed();
@@ -30,6 +33,7 @@ contract("1. Main contract test", function (accounts) {
     marketItemContract = await MarketItemMain.deployed();
     marketPlaceContract = await MarketPlaceMain1155.deployed();
     mintFactory = await MintFactoryMain1155.deployed(accounts[0], accounts[0]);
+    attackerAddress = await Attacker.deployed(marketItemContract.address);
 
     if (isRefundEnabled) {
       refundedContract = await Refunded.deployed();
@@ -190,4 +194,19 @@ contract("1. Main contract test", function (accounts) {
       console.log("Refunds not enabled");
     }
   });
+
+  // it("1.11 Try to attack market item contract", async () => {
+  //   var tokenIds = [1];
+  //   var price = web3.utils.toWei("0.01", "ether");
+  //   var amounts = [1];
+  //   var returnValues = await attackerAddress.attack(
+  //     nftContract.address,
+  //     tokenIds,
+  //     price,
+  //     amounts
+  //   );
+  //   nftAdd = returnValues.logs[0].args.nftContract;
+  //   console.log(nftAdd);
+  // });
+
 });
