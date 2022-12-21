@@ -61,7 +61,7 @@ library MarketItemData {
 
     event MarketItemSold(uint256 indexed itemId, address owner);
 
-    function emitEMarketItemSold(uint256 itemId, address owner) public {
+    function emitMarketItemSold(uint256 itemId, address owner) public {
         emit MarketItemSold(itemId, owner);
     }
 }
