@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.25 <0.9.0;
 
-contract FeeManager {
+import "./ReentrancyGuard.sol";
+
+contract FeeManager is ReentrancyGuard {
     address payable public operator;
     address payable public feeReceiver;
     uint256 public fee;
@@ -22,12 +24,17 @@ contract FeeManager {
         _;
     }
 
+    modifier isNotZeroAddress(address addr) {
+        require(addr != address(0), "The address isn't valid");
+        _;
+    }
+
     /**
      * @notice Utilizing isOperator.
      * @dev Add address to the operators mapping.
      * @param newOperator Address to add to the operators mapping.
      */
-    function setOperator(address newOperator) public isOperator(msg.sender) {
+    function setOperator(address newOperator) public isOperator(msg.sender) isNotZeroAddress(newOperator) {
         OperatorId[newOperator] = true;
     }
 
@@ -37,6 +44,7 @@ contract FeeManager {
      * @param newFee The new fee of a transaction.
      */
     function setFee(uint256 newFee) public isOperator(msg.sender) {
+        require(newFee > 0, "Error: new fee must be greater than zero.");
         fee = newFee;
     }
 
@@ -48,7 +56,7 @@ contract FeeManager {
      */
     function setfeeReceiver(
         address payable newfeeReceiver
-    ) public isOperator(msg.sender) {
+    ) public isOperator(msg.sender) isNotZeroAddress(newfeeReceiver)  {
         require(
             OperatorId[newfeeReceiver] == true,
             "Fee Receiver is Not an Operator"
@@ -62,18 +70,18 @@ contract FeeManager {
      * @param _value The transaction value.
      * @return The data of the 2 call function.
      */
-    function transferWithFee(
+    function transferWithFee (
         address payable _to,
         uint256 _value
-    ) public returns (bytes memory, bytes memory) {
+    ) public nonReentrant returns (bytes memory, bytes memory) {
         uint256 feeValue = ((_value * fee) / 100);
         uint256 newValue = (_value - feeValue);
-        (bool sent, bytes memory data) = _to.call{value: newValue}("");
-        (bool sent2, bytes memory data2) = feeReceiver.call{value: feeValue}(
+        (bool success, bytes memory data) = _to.call{value: newValue}("");
+        require(success, "Error on sending funds to");
+        (bool success2, bytes memory data2) = feeReceiver.call{value: feeValue}(
             ""
         );
-        require(sent, "Error on sending funds ");
-        require(sent2, "Error on sending funds to FeeOperator");
+        require(success2, "Error on sending funds to FeeOperator");
 
         return (data, data2);
     }
