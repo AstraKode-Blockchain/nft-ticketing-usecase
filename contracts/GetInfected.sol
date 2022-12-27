@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity >=0.4.25 <0.9.0;
 
 // Imports
-import "../utils/Chainlink.sol";
 import "../utils/ChainlinkClient.sol";
 import "../utils/Ownable.sol";
 
@@ -12,6 +11,8 @@ interface IERC20 {
 
 // Define contract that extends ChainlinkClient
 contract GetInfected is ChainlinkClient, Ownable {
+    using Chainlink for Chainlink.Request;
+
     // Declare contract-wide variables
     uint256 public volume;
     address private oracle;
@@ -24,37 +25,35 @@ contract GetInfected is ChainlinkClient, Ownable {
         setChainlinkToken(mumbaiLINKContract);
         oracle = 0x0bDDCD124709aCBf9BB3F824EbC61C87019888bb;
         jobId = "2bb15c3f9cfc4336b95012872ff05092";
-        fee = 100; // (Varies by network and job)
+        fee = 0.01 * 10 ** 18; // (Varies by network and job)
     }
 
     // Create a Chainlink request to retrieve API response
     function requestVolumeData() public returns (bytes32 requestId) {
         bytes32 reqId;
 
-        Chainlink.Request memory request;
-        request = buildChainlinkRequest(
+        Chainlink.Request memory request = buildChainlinkRequest(
             jobId,
             address(this),
             this.fulfill.selector
         );
 
         // Set the URL to perform the GET request on
-        Chainlink.add(
-            request,
+        request.add(
             "get",
             "https://api.apify.com/v2/key-value-stores/vqnEUe7VtKNMqGqFF/records/LATEST?disableRedirect=true"
         );
 
         // Fill required request arguments
-        Chainlink.add(request, "path", "infectedByRegion.2.infectedCount");
+        request.add("path", "infectedByRegion,2,infectedCount");
 
         // Multiply the result by 1000000000000000000 to remove decimals
-        Chainlink.addInt(request, "times", 10 ** 18);
+        request.addInt("times", 10 ** 18);
 
         reqId = sendChainlinkRequestTo(oracle, request, fee);
 
         // Return
-        return reqId;
+        return sendChainlinkRequestTo(oracle, request, fee);
     }
 
     // Receive the response in the form of uint256
@@ -63,6 +62,10 @@ contract GetInfected is ChainlinkClient, Ownable {
         uint256 _volume
     ) public recordChainlinkFulfillment(_requestId) {
         volume = _volume;
+    }
+
+    function getVolume() public view returns (uint256) {
+        return volume;
     }
 
     function withdrawToken(

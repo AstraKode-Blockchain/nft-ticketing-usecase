@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity >=0.4.25 <0.9.0;
 
 import "../utils/Counters.sol";
 import "../utils/ReentrancyGuard.sol";
@@ -11,7 +11,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     using MarketItemData for *;
-    MarketItemData.MarketItemUtils private idToMarketItemData;
+    MarketItemData.MarketItemUtils idToMarketItemData;
 
     function onERC1155Received(
         address,
@@ -33,8 +33,21 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
         return this.onERC1155BatchReceived.selector;
     }
 
+    /**
+     * @notice Utilizing nonReentrant from ReentrancyGuard.
+     * @dev Create market item and store it in a mapping from id to market item struct (the struct declared in the MarketItemData library).
+     * Emits MarketItemCreated event.
+     * @param nftContract The NFT contract address.
+     * @param fromAddress The contract address that sent the NFT.
+     * @param toAddress The contract address that received NFT.
+     * @param tokenIds The market item ids.
+     * @param price The market item price.
+     * @param amounts The amount of market items to create.
+     */
     function _createMarketItem(
         address nftContract,
+        address fromAddress,
+        address toAddress,
         uint256[] memory tokenIds,
         uint256 price,
         uint256[] memory amounts
@@ -42,14 +55,14 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
         require(price > 0, "Price must be greater than 0");
 
         IERC1155(nftContract).safeBatchTransferFrom(
-            msg.sender,
-            address(this),
+            fromAddress,
+            toAddress,
             tokenIds,
             amounts,
             ""
         );
 
-        for (uint i = 0; i <= (tokenIds.length - 1); i++) {
+        for (uint256 i = 0; i <= (tokenIds.length - 1); i++) {
             _itemIds.increment();
             uint256 itemId = _itemIds.current();
 
@@ -58,17 +71,17 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
                     itemId,
                     nftContract,
                     tokenIds[i],
-                    payable(msg.sender),
+                    payable(fromAddress),
                     payable(address(0)),
                     price,
                     false
                 );
 
-            emit MarketItemData.MarketItemCreated(
+            MarketItemData.emitMarketItemCreated(
                 itemId,
                 nftContract,
-                tokenIds[i],
-                msg.sender,
+                tokenIds,
+                fromAddress,
                 address(0),
                 price,
                 false
@@ -78,9 +91,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
 
     fallback() external payable {}
 
-    event ValueReceived(address from, uint amount, address to);
-
     receive() external payable {
-        emit ValueReceived(msg.sender, msg.value, address(this));
+        MarketItemData.emitValueReceived(msg.sender, msg.value, address(this));
     }
 }

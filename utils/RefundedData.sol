@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity >=0.4.25 <0.9.0;
 
 library RefundedData {
     struct RefundParameters {
@@ -12,6 +12,14 @@ library RefundedData {
     }
 
     struct RefundUtils {
+        // This mapping is used for finding refund parameters by their id
         mapping(uint256 => RefundParameters) idRefundParameters;
     }
+
+    event RefundParametersAdded(
+        address nftContract,
+        uint256 maxInfection,
+        uint256 price,
+        uint256 itemId
+    );
 }
