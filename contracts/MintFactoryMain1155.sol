@@ -53,7 +53,8 @@ contract MintFactoryMain1155 is AccessControl {
         string memory image,
         uint256 maxInfected,
         string memory date
-    ) external onlyRole(MINTER) {
+    ) external onlyRole(MINTER) returns(bool){
+        bool isDeployed = false;
         _itemIds.increment();
         uint256 itemId = _itemIds.current();
         address owner = msg.sender;
@@ -70,5 +71,9 @@ contract MintFactoryMain1155 is AccessControl {
             date,
             itemId
         );
+
+        isDeployed = true; 
+        return isDeployed;
+
     }
 }

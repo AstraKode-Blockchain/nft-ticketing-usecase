@@ -64,9 +64,7 @@ contract GetInfected is ChainlinkClient, Ownable {
         volume = _volume;
     }
 
-    function getVolume() public view returns (uint256) {
-        return volume;
-    }
+    
 
     function withdrawToken(
         address _tokenContract,

@@ -19,7 +19,8 @@
  */
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const fs = require("fs");
-const mnemonic = "";
+const mnemonic =
+  "deputy primary snap shrug nest animal zero tonight fix name smile mixed";
 
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 //
@@ -71,8 +72,9 @@ module.exports = {
         // See the solidity docs for advice about optimization and evmVersion
         optimizer: {
           enabled: true,
-          runs: 200,
+          runs: 500,
         },
+        //viaIR: true,
       },
       //  evmVersion: "byzantium"
       // }

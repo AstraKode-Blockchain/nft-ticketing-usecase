@@ -101,6 +101,8 @@ contract Refunded is FeeManager{
         );
         uint256 length = clients.length;
         refundUtils.idRefundParameters[itemId].refunded = true;
+
+        
         for (uint256 i = 0; i < length; i++) {
             (bool success, bytes memory data) = clients[i].call{
                 value: refundUtils.idRefundParameters[itemId].price

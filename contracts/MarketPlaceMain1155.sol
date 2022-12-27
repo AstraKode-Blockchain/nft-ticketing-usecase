@@ -56,7 +56,7 @@ contract MarketPlaceMain1155 is
      * @param itemId The item id.
      * @param _tokenIds The token ids to sale.
      * @param amounts The amount of market items to sale.
-     */
+     */ //TODO FIX TO ADDRESS
     function _createMarketSale(
         address nftContract,
         address toAddress,
@@ -67,16 +67,31 @@ contract MarketPlaceMain1155 is
         public
         payable
         nonReentrant
-        priceEqualToValue(
-            idToMarketItemData.idToMarketItem[itemId].price,
-            address(this).balance
-        )
         alreadySold(
             idToMarketItemData.idToMarketItem[itemId].sold,
             itemId,
             toAddress
         )
+        
    returns (bytes memory, bytes memory) {
+        require(
+            address(this).balance >= idToMarketItemData.idToMarketItem[itemId].price,
+            "Please submit the asking price in order to complete the purchase"
+        );
+        
+
+        // MODIFIER priceEqualToValue(
+        //     idToMarketItemData.idToMarketItem[itemId].price,
+        //     address(this).balance
+        // ) 
+        
+    
+
+        uint256[] memory tokenAmounts  = IERC1155(nftContract).balanceOfBatch(msg.sender, _tokenIds);
+        
+
+        require(containsZero(tokenAmounts) == false, 'Message sender does not own the token');
+ 
         (bytes memory data, bytes memory data2) = transferWithFee(
             payable(address(this)),
             idToMarketItemData.idToMarketItem[itemId].price
@@ -94,6 +109,7 @@ contract MarketPlaceMain1155 is
         idToMarketItemData.idToMarketItem[itemId].owner = payable(toAddress);
         _itemsSold.increment();
         idToMarketItemData.idToMarketItem[itemId].sold = true;
+
         return (data, data2);
     }
 
@@ -131,4 +147,12 @@ contract MarketPlaceMain1155 is
     receive() external payable {
         emit MarketItemData.ValueReceived(msg.sender, msg.value, address(this));
     }
+
+     function containsZero(uint256[] memory arr) private view returns (bool) {
+    for (uint i = 0; i < arr.length; i++) {
+        if (arr[i] == 0) {
+            return true;
+        }
+    }
+     }
 }

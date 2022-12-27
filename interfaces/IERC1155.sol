@@ -73,8 +73,12 @@ interface IERC1155 is IERC165 {
      *
      * - `accounts` and `ids` must have the same length.
      */
+    // function balanceOfBatch(
+    //     address[] calldata accounts,
+    //     uint256[] calldata ids
+    // ) external view returns (uint256[] memory);
     function balanceOfBatch(
-        address[] calldata accounts,
+        address account,
         uint256[] calldata ids
     ) external view returns (uint256[] memory);
 

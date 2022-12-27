@@ -102,11 +102,13 @@ contract Main is
 
         NFTContract nft = NFTContract(
             contractsAddressesData._nftContractAddress
-        );
+        ); 
+
+        
 
         _createMarketItem(
             nftContract,
-            nft.getOwner(),
+            msg.sender, //getBalanceof(msg.sender) from erc1155
             contractsAddressesData._marketPlaceContractAddress,
             tokenIds,
             price,
@@ -117,7 +119,7 @@ contract Main is
             1,
             address(nft),
             tokenIds,
-            nft.getOwner(),
+            msg.sender,
             address(0),
             price,
             false
@@ -147,7 +149,6 @@ contract Main is
             payable(contractsAddressesData._marketPlaceContractAddress),
             idToMarketItemData.idToMarketItem[itemId].price
         ); */
-
         (bytes memory data, bytes memory data2) = callee._createMarketSale(
             nftContract,
             msg.sender,
@@ -155,6 +156,8 @@ contract Main is
             _tokenIds,
             amounts
         );
+
+        // add require to check data1 data2?
 
         return (data, data2);
     }
@@ -260,7 +263,7 @@ contract Main is
             contractsAddressesData._mintFactoryContractAddress
         );
 
-        callee._deployCollection(
+        bool isDeployed = callee._deployCollection(
             uri,
             ids,
             amount,
@@ -269,7 +272,16 @@ contract Main is
             maxInfected,
             date
         );
+
+        require(isDeployed == true, 'Collection deployment failed');
+
+
     }
+
+   
+
+    
+}
 
     // function onERC1155Received(
     //     address,
@@ -298,4 +310,4 @@ contract Main is
     // receive() external payable {
     //     emit ValueReceived(msg.sender, msg.value, address(this));
     // }
-}
+

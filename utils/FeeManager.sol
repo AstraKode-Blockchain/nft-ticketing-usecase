@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.25 <0.9.0;
+import "../utils/ReentrancyGuard.sol";
 
-contract FeeManager {
+contract FeeManager is ReentrancyGuard {
     address payable public operator;
     address payable public feeReceiver;
     uint256 public fee;
@@ -28,6 +29,7 @@ contract FeeManager {
      * @param newOperator Address to add to the operators mapping.
      */
     function setOperator(address newOperator) public isOperator(msg.sender) {
+        require(newOperator != address(0));
         OperatorId[newOperator] = true;
     }
 
@@ -37,6 +39,7 @@ contract FeeManager {
      * @param newFee The new fee of a transaction.
      */
     function setFee(uint256 newFee) public isOperator(msg.sender) {
+        require(newFee>0 && newFee<=50, "Fee can not be less than 1 or bigger than 50");
         fee = newFee;
     }
 
@@ -44,16 +47,17 @@ contract FeeManager {
      * @notice Utilizing isOperator.
      * @dev Set the transaction receiver address.
      * Reverts if the transaction receiver isn't an operator
-     * @param newfeeReceiver The transaction receiver address.
+     * @param newFeeReceiver The transaction receiver address.
      */
     function setfeeReceiver(
-        address payable newfeeReceiver
+        address payable newFeeReceiver
     ) public isOperator(msg.sender) {
         require(
-            OperatorId[newfeeReceiver] == true,
+            OperatorId[newFeeReceiver] == true,
             "Fee Receiver is Not an Operator"
         );
-        feeReceiver = newfeeReceiver;
+        require(newFeeReceiver != address(0));
+        feeReceiver = newFeeReceiver;
     }
 
     /**
@@ -65,7 +69,7 @@ contract FeeManager {
     function transferWithFee(
         address payable _to,
         uint256 _value
-    ) public returns (bytes memory, bytes memory) {
+    ) public nonReentrant returns (bytes memory, bytes memory) {
         uint256 feeValue = ((_value * fee) / 100);
         uint256 newValue = (_value - feeValue);
         (bool sent, bytes memory data) = _to.call{value: newValue}("");
