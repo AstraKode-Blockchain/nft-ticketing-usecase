@@ -1,21 +1,27 @@
-const Counters = artifacts.require('Counters');
-const MarketItemData = artifacts.require('MarketItemData');
-const RefundedData = artifacts.require('RefundedData');
-const ContractCreated = artifacts.require('ContractCreated');
-const MarketItemMain = artifacts.require('MarketItemMain');
-const MarketPlaceMain1155 = artifacts.require('MarketPlaceMain1155');
-const GetInfected = artifacts.require('GetInfected');
-const MintFactoryMain1155 = artifacts.require('MintFactoryMain1155');
-const Refunded = artifacts.require('Refunded');
-const NFTContract = artifacts.require('NFTContract');
-const accounts = [
-    "acc0",
-    "acc1",
-    "acc2"
-  ];
+const Web3 = require("web3");
+const Counters = artifacts.require("Counters");
+const MarketItemData = artifacts.require("MarketItemData");
+const RefundedData = artifacts.require("RefundedData");
+const ContractCreated = artifacts.require("ContractCreated");
+const MarketItemMain = artifacts.require("MarketItemMain");
+const MarketPlaceMain1155 = artifacts.require("MarketPlaceMain1155");
+const GetInfected = artifacts.require("GetInfected");
+const MintFactoryMain1155 = artifacts.require("MintFactoryMain1155");
+const Refunded = artifacts.require("Refunded");
+const NFTContract = artifacts.require("NFTContract");
+var web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
+let accounts;
 
+module.exports = async function (deployer) {
+  try {
+    accounts = await web3.eth.getAccounts();
+    console.log(accounts);
+  } catch (error) {
+    console.error(error);
+    // expected output: ReferenceError: nonExistentFunction is not defined
+    // Note - error messages will vary depending on browser
+  }
 
-module.exports = function (deployer) {
   deployer.deploy(Counters);
   deployer.deploy(MarketItemData);
   deployer.deploy(RefundedData);
@@ -35,9 +41,15 @@ module.exports = function (deployer) {
   deployer.link(ContractCreated, MintFactoryMain1155);
   deployer.deploy(MintFactoryMain1155, accounts[0], accounts[1]);
 
-  deployer.deploy(NFTContract, "https://www.google.com/", [1], [1], accounts[2]);
+  deployer.deploy(
+    NFTContract,
+    "https://www.google.com/",
+    [1],
+    [1],
+    accounts[2]
+  );
 
   deployer.link(Counters, Refunded);
   deployer.link(RefundedData, Refunded);
   deployer.deploy(Refunded);
-}
+};
