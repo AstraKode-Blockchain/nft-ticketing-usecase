@@ -85,16 +85,11 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
         //     payable(_marketItemContractAddress)
         // );
 
-        NFTContract nft = NFTContract(
-            contractsAddressesData._nftContractAddress
-        ); 
-
-        
+        NFTContract nft = NFTContract(nftContract);
 
         _createMarketItem(
             nftContract,
             nft.getOwner(),
-            contractsAddressesData._marketPlaceContractAddress,
             tokenIds,
             price,
             amounts
@@ -257,41 +252,34 @@ contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
             date
         );
 
-        require(isDeployed == true, 'Collection deployment failed');
-
-
+        require(isDeployed == true, "Collection deployment failed");
     }
-
-   
-
-    
 }
 
-    // function onERC1155Received(
-    //     address,
-    //     address,
-    //     uint256,
-    //     uint256,
-    //     bytes memory
-    // ) public virtual override returns (bytes4) {
-    //     return this.onERC1155Received.selector;
-    // }
+// function onERC1155Received(
+//     address,
+//     address,
+//     uint256,
+//     uint256,
+//     bytes memory
+// ) public virtual override returns (bytes4) {
+//     return this.onERC1155Received.selector;
+// }
 
-    // function onERC1155BatchReceived(
-    //     address,
-    //     address,
-    //     uint256[] memory,
-    //     uint256[] memory,
-    //     bytes memory
-    // ) public virtual override returns (bytes4) {
-    //     return this.onERC1155BatchReceived.selector;
-    // }
+// function onERC1155BatchReceived(
+//     address,
+//     address,
+//     uint256[] memory,
+//     uint256[] memory,
+//     bytes memory
+// ) public virtual override returns (bytes4) {
+//     return this.onERC1155BatchReceived.selector;
+// }
 
-    // fallback() external payable {}
+// fallback() external payable {}
 
-    // event ValueReceived(address from, uint256 amount, address to);
+// event ValueReceived(address from, uint256 amount, address to);
 
-    // receive() external payable {
-    //     emit ValueReceived(msg.sender, msg.value, address(this));
-    // }
-
+// receive() external payable {
+//     emit ValueReceived(msg.sender, msg.value, address(this));
+// }
