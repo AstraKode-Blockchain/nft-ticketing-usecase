@@ -44,6 +44,8 @@ module.exports = {
       port: "7545",
       network_id: "*", // match any network id
     },
+<<<<<<< HEAD
+=======
     matic: {
       provider: new HDWalletProvider(
         mnemonic,
@@ -56,6 +58,7 @@ module.exports = {
       //gasLimit: 40000000,
       networkCheckTimeoutnetworkCheckTimeout: 10000,
     },
+>>>>>>> 496a7e053c18f6ea343156edd5a088d3b4d19e7b
   },
 
   // Set default mocha options here, use special reporters etc.
@@ -66,7 +69,11 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
+<<<<<<< HEAD
+      version: "0.8.17", // Fetch exact version from solc-bin (default: truffle's version)
+=======
       version: "0.8.0", // Fetch exact version from solc-bin (default: truffle's version)
+>>>>>>> 496a7e053c18f6ea343156edd5a088d3b4d19e7b
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       settings: {
         // See the solidity docs for advice about optimization and evmVersion
