@@ -13,6 +13,15 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     using MarketItemData for *;
     MarketItemData.MarketItemUtils idToMarketItemData;
 
+    struct ContractsAddresses {
+        address payable _marketPlaceContractAddress;
+        address payable _refundedContractAddress;
+        address payable _mintFactoryContractAddress;
+        address payable _nftContractAddress;
+    }
+
+    ContractsAddresses contractsAddressesData;
+
     function onERC1155Received(
         address,
         address,
@@ -39,7 +48,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
      * Emits MarketItemCreated event.
      * @param nftContract The NFT contract address.
      * @param fromAddress The contract address that sent the NFT.
-     * @param toAddress The contract address that received NFT.
+
      * @param tokenIds The market item ids.
      * @param price The market item price.
      * @param amounts The amount of market items to create.
@@ -47,7 +56,6 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
     function _createMarketItem(
         address nftContract,
         address fromAddress,
-        address toAddress,
         uint256[] memory tokenIds,
         uint256 price,
         uint256[] memory amounts
@@ -56,7 +64,7 @@ contract MarketItemMain is ReentrancyGuard, ERC1155Receiver {
 
         IERC1155(nftContract).safeBatchTransferFrom(
             fromAddress,
-            toAddress,
+            contractsAddressesData._marketPlaceContractAddress,
             tokenIds,
             amounts,
             ""

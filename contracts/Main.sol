@@ -11,25 +11,10 @@ import "../utils/ERC1155Receiver.sol";
 import "../utils/FeeManager.sol";
 import {MarketItemData} from "../utils/MarketItemData.sol";
 
-contract Main is
-    Ownable,
-    ReentrancyGuard,
-    ERC1155Receiver,
-    MarketItemMain
-    
-{
+contract Main is Ownable, ReentrancyGuard, ERC1155Receiver, MarketItemMain {
     //marktetItem main to external call
     // address private _marketItemContractAddress;
     using MarketItemData for *;
-
-    struct ContractsAddresses {
-        address payable _marketPlaceContractAddress;
-        address payable _refundedContractAddress;
-        address payable _mintFactoryContractAddress;
-        address payable _nftContractAddress;
-    }
-
-    ContractsAddresses contractsAddressesData;
 
     modifier isRefundEnabled() {
         require(
@@ -107,7 +92,6 @@ contract Main is
         _createMarketItem(
             nftContract,
             nft.getOwner(),
-            contractsAddressesData._marketPlaceContractAddress,
             tokenIds,
             price,
             amounts
@@ -200,11 +184,12 @@ contract Main is
      * @param clients The addresses need to be refunded.
      * @param itemId The item id.
      */
-    function refundUsers(
-        address payable[] memory clients,
-        uint256 itemId
-    ) public payable isRefundEnabled {
-       /*  transferWithFee(
+    function refundUsers(address payable[] memory clients, uint256 itemId)
+        public
+        payable
+        isRefundEnabled
+    {
+        /*  transferWithFee(
             payable(contractsAddressesData._refundedContractAddress),
             msg.value
         ); */
@@ -222,9 +207,7 @@ contract Main is
      * @param itemId The item id.
      * @return A refund parameters struct (the struct declared in the RefundParameters library).
      */
-    function fetchParameters(
-        uint256 itemId
-    )
+    function fetchParameters(uint256 itemId)
         public
         view
         isRefundEnabled
